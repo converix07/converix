@@ -29,6 +29,11 @@ import {
   Eye,
   Scale,
   ShieldCheck,
+  MapPin,
+  Phone,
+  Linkedin,
+  Mail,
+  ExternalLink,
 } from "lucide-react";
 import { useState } from "react";
 import {
@@ -1075,6 +1080,40 @@ function Contact() {
             </CardContent>
           </Card>
         </FadeIn>
+
+        {/* Contact details below form */}
+        <FadeIn delay={0.3}>
+          <div className="mt-10 grid sm:grid-cols-2 gap-4 text-sm">
+            <div className="flex items-start gap-3 text-neutral-400">
+              <MapPin className="w-5 h-5 text-emerald-400 mt-0.5 shrink-0" />
+              <div>
+                <p className="text-white font-medium">Adresse</p>
+                <p className="text-neutral-500">Zur Ostsee 12, 18236 Wichmannsdorf</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 text-neutral-400">
+              <Phone className="w-5 h-5 text-emerald-400 mt-0.5 shrink-0" />
+              <div>
+                <p className="text-white font-medium">Telefon</p>
+                <a href="tel:+4915679611096" className="text-neutral-500 hover:text-emerald-400 transition-colors">015679 611096</a>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 text-neutral-400">
+              <Mail className="w-5 h-5 text-emerald-400 mt-0.5 shrink-0" />
+              <div>
+                <p className="text-white font-medium">E-Mail</p>
+                <a href="mailto:kontakt@converix.info" className="text-neutral-500 hover:text-emerald-400 transition-colors">kontakt@converix.info</a>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 text-neutral-400">
+              <Linkedin className="w-5 h-5 text-emerald-400 mt-0.5 shrink-0" />
+              <div>
+                <p className="text-white font-medium">LinkedIn</p>
+                <a href="https://www.linkedin.com/in/ertancelik-converix" target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-emerald-400 transition-colors">Ertan Çelik</a>
+              </div>
+            </div>
+          </div>
+        </FadeIn>
       </div>
     </section>
   );
@@ -1153,11 +1192,11 @@ function ImpressumDialog() {
           <div className="space-y-6 text-sm text-neutral-400 leading-relaxed">
             <div>
               <h3 className="text-white font-semibold mb-2">Angaben gemäß § 5 TMG</h3>
-              <p>Converix<br />vertreten durch Ertan Çelik</p>
+              <p>Converix<br />vertreten durch Ertan Çelik<br />Zur Ostsee 12<br />18236 Wichmannsdorf</p>
             </div>
             <div>
               <h3 className="text-white font-semibold mb-2">Kontakt</h3>
-              <p>E-Mail: kontakt@converix.info<br />Website: www.converix.de</p>
+              <p>Telefon: 015679 611096<br />E-Mail: kontakt@converix.info<br />Website: www.converix.de<br />LinkedIn: <span className="text-emerald-400">linkedin.com/in/ertancelik-converix</span></p>
             </div>
             <div>
               <h3 className="text-white font-semibold mb-2">Umsatzsteuer-ID</h3>
@@ -1165,7 +1204,7 @@ function ImpressumDialog() {
             </div>
             <div>
               <h3 className="text-white font-semibold mb-2">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h3>
-              <p>Ertan Çelik<br />Converix<br />[Adresse wird nachgereicht]</p>
+              <p>Ertan Çelik<br />Converix<br />Zur Ostsee 12<br />18236 Wichmannsdorf</p>
             </div>
             <div>
               <h3 className="text-white font-semibold mb-2">Haftungsausschluss</h3>
@@ -1218,7 +1257,7 @@ function Footer() {
             <Heart className="w-4 h-4 text-amber-500" />
             <span className="text-neutral-500 text-sm">
               Mitgründer von{" "}
-              <span className="text-amber-400 font-medium">DEKAFOK</span> —
+              <a href="https://dekafok.org.tr/" target="_blank" rel="noopener noreferrer" className="text-amber-400 font-medium hover:underline">DEKAFOK</a> —
               Engagement für Meeresschildkröten & Mittelmeerrobben
             </span>
           </div>
