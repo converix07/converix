@@ -1,0 +1,910 @@
+     1→"use client";
+     2→
+     3→import { motion, useInView } from "framer-motion";
+     4→import { useRef } from "react";
+     5→import { Button } from "@/components/ui/button";
+     6→import { Card, CardContent } from "@/components/ui/card";
+     7→import { Badge } from "@/components/ui/badge";
+     8→import { Input } from "@/components/ui/input";
+     9→import { Textarea } from "@/components/ui/textarea";
+    10→import {
+    11→  MessageSquare,
+    12→  CalendarCheck,
+    13→  Users,
+    14→  Shield,
+    15→  Heart,
+    16→  Globe,
+    17→  ArrowRight,
+    18→  CheckCircle2,
+    19→  Star,
+    20→  Send,
+    21→  Menu,
+    22→  X,
+    23→  ChevronDown,
+    24→  Quote,
+    25→  Briefcase,
+    26→  Handshake,
+    27→  Target,
+    28→} from "lucide-react";
+    29→import { useState } from "react";
+    30→
+    31→/* ──────────────────────────────────────────
+    32→   Animation helpers
+    33→   ────────────────────────────────────────── */
+    34→function FadeIn({
+    35→  children,
+    36→  delay = 0,
+    37→  className = "",
+    38→  direction = "up",
+    39→}: {
+    40→  children: React.ReactNode;
+    41→  delay?: number;
+    42→  className?: string;
+    43→  direction?: "up" | "down" | "left" | "right";
+    44→}) {
+    45→  const ref = useRef(null);
+    46→  const isInView = useInView(ref, { once: true, margin: "-60px" });
+    47→  const dirs = {
+    48→    up: { y: 40, x: 0 },
+    49→    down: { y: -40, x: 0 },
+    50→    left: { x: 40, y: 0 },
+    51→    right: { x: -40, y: 0 },
+    52→  };
+    53→  return (
+    54→    <motion.div
+    55→      ref={ref}
+    56→      initial={{ opacity: 0, ...dirs[direction] }}
+    57→      animate={isInView ? { opacity: 1, x: 0, y: 0 } : {}}
+    58→      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+    59→      className={className}
+    60→    >
+    61→      {children}
+    62→    </motion.div>
+    63→  );
+    64→}
+    65→
+    66→function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
+    67→  const ref = useRef(null);
+    68→  const isInView = useInView(ref, { once: true });
+    69→  return (
+    70→    <motion.span
+    71→      ref={ref}
+    72→      initial={{ opacity: 0 }}
+    73→      animate={isInView ? { opacity: 1 } : {}}
+    74→      transition={{ duration: 0.5 }}
+    75→    >
+    76→      {isInView ? target : 0}
+    77→      {suffix}
+    78→    </motion.span>
+    79→  );
+    80→}
+    81→
+    82→/* ──────────────────────────────────────────
+    83→   NAVIGATION
+    84→   ────────────────────────────────────────── */
+    85→function Navbar() {
+    86→  const [open, setOpen] = useState(false);
+    87→  const links = [
+    88→    { label: "Leistung", href: "#services" },
+    89→    { label: "Story", href: "#story" },
+    90→    { label: "Für wen", href: "#target" },
+    91→    { label: "Ergebnisse", href: "#results" },
+    92→    { label: "Kontakt", href: "#contact" },
+    93→  ];
+    94→
+    95→  return (
+    96→    <header className="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-xl border-b border-white/10">
+    97→      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    98→        {/* Logo */}
+    99→        <a href="#" className="flex items-center gap-2 group">
+   100→          <div className="w-9 h-9 rounded-lg bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 group-hover:bg-emerald-500/30 transition-colors">
+   101→            <MessageSquare className="w-5 h-5 text-emerald-400" />
+   102→          </div>
+   103→          <span className="text-xl font-bold tracking-tight text-white">
+   104→            converix
+   105→          </span>
+   106→        </a>
+   107→
+   108→        {/* Desktop links */}
+   109→        <div className="hidden md:flex items-center gap-8">
+   110→          {links.map((l) => (
+   111→            <a
+   112→              key={l.href}
+   113→              href={l.href}
+   114→              className="text-sm text-neutral-400 hover:text-white transition-colors"
+   115→            >
+   116→              {l.label}
+   117→            </a>
+   118→          ))}
+   119→          <Button
+   120→            asChild
+   121→            className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-full px-6"
+   122→          >
+   123→            <a href="#contact">Gespräch buchen</a>
+   124→          </Button>
+   125→        </div>
+   126→
+   127→        {/* Mobile toggle */}
+   128→        <button
+   129→          className="md:hidden text-white"
+   130→          onClick={() => setOpen(!open)}
+   131→          aria-label="Menü öffnen"
+   132→        >
+   133→          {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+   134→        </button>
+   135→      </nav>
+   136→
+   137→      {/* Mobile menu */}
+   138→      {open && (
+   139→        <motion.div
+   140→          initial={{ opacity: 0, y: -10 }}
+   141→          animate={{ opacity: 1, y: 0 }}
+   142→          className="md:hidden bg-black/95 backdrop-blur-xl border-b border-white/10 px-4 pb-6 pt-2"
+   143→        >
+   144→          {links.map((l) => (
+   145→            <a
+   146→              key={l.href}
+   147→              href={l.href}
+   148→              onClick={() => setOpen(false)}
+   149→              className="block py-3 text-neutral-300 hover:text-white transition-colors"
+   150→            >
+   151→              {l.label}
+   152→            </a>
+   153→          ))}
+   154→          <Button
+   155→            asChild
+   156→            className="w-full mt-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-full"
+   157→          >
+   158→            <a href="#contact" onClick={() => setOpen(false)}>
+   159→              Gespräch buchen
+   160→            </a>
+   161→          </Button>
+   162→        </motion.div>
+   163→      )}
+   164→    </header>
+   165→  );
+   166→}
+   167→
+   168→/* ──────────────────────────────────────────
+   169→   HERO SECTION
+   170→   ────────────────────────────────────────── */
+   171→function Hero() {
+   172→  return (
+   173→    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
+   174→      {/* Background gradient */}
+   175→      <div className="absolute inset-0">
+   176→        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/8 rounded-full blur-3xl" />
+   177→        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-emerald-600/5 rounded-full blur-3xl" />
+   178→        <div className="absolute top-1/2 right-0 w-[400px] h-[400px] bg-teal-500/5 rounded-full blur-3xl" />
+   179→        {/* Grid overlay */}
+   180→        <div
+   181→          className="absolute inset-0 opacity-[0.03]"
+   182→          style={{
+   183→            backgroundImage:
+   184→              "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)",
+   185→            backgroundSize: "60px 60px",
+   186→          }}
+   187→        />
+   188→      </div>
+   189→
+   190→      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20">
+   191→        <FadeIn delay={0}>
+   192→          <Badge
+   193→            variant="outline"
+   194→            className="mb-6 border-emerald-500/30 bg-emerald-500/10 text-emerald-400 px-4 py-1.5 text-sm font-medium"
+   195→          >
+   196→            <MessageSquare className="w-3.5 h-3.5 mr-2" />
+   197→            Remote Chatting · Appointment Setting · Kundenbeziehungen
+   198→          </Badge>
+   199→        </FadeIn>
+   200→
+   201→        <FadeIn delay={0.1}>
+   202→          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-white leading-[1.08] tracking-tight">
+   203→            Menschen kaufen nicht
+   204→            <br />
+   205→            wegen Produkten.
+   206→            <br />
+   207→            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">
+   208→              Menschen entscheiden sich für Vertrauen.
+   209→            </span>
+   210→          </h1>
+   211→        </FadeIn>
+   212→
+   213→        <FadeIn delay={0.25}>
+   214→          <p className="mt-6 sm:mt-8 text-lg sm:text-xl text-neutral-400 max-w-2xl mx-auto leading-relaxed">
+   215→            Converix verwandelt kalte Leads in warme Termine — durch
+   216→            authentischen Dialog, interkulturelle Kompetenz und über 30 Jahre
+   217→            Erfahrung im direkten Kundenkontakt.
+   218→          </p>
+   219→        </FadeIn>
+   220→
+   221→        <FadeIn delay={0.4}>
+   222→          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+   223→            <Button
+   224→              asChild
+   225→              size="lg"
+   226→              className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-full px-8 text-base h-12"
+   227→            >
+   228→              <a href="#contact">
+   229→                Jetzt Gespräch anfragen
+   230→                <ArrowRight className="w-4 h-4 ml-2" />
+   231→              </a>
+   232→            </Button>
+   233→            <Button
+   234→              asChild
+   235→              variant="outline"
+   236→              size="lg"
+   237→              className="border-white/20 text-white hover:bg-white/5 rounded-full px-8 text-base h-12"
+   238→            >
+   239→              <a href="#story">Meine Geschichte</a>
+   240→            </Button>
+   241→          </div>
+   242→        </FadeIn>
+   243→
+   244→        {/* Trust badges */}
+   245→        <FadeIn delay={0.55}>
+   246→          <div className="mt-16 flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-neutral-500 text-sm">
+   247→            <div className="flex items-center gap-2">
+   248→              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+   249→              <span>30+ Jahre Erfahrung</span>
+   250→            </div>
+   251→            <div className="flex items-center gap-2">
+   252→              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+   253→              <span>Interkulturelle Kompetenz</span>
+   254→            </div>
+   255→            <div className="flex items-center gap-2">
+   256→              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+   257→              <span>Langfristige Zusammenarbeit</span>
+   258→            </div>
+   259→          </div>
+   260→        </FadeIn>
+   261→      </div>
+   262→
+   263→      {/* Scroll indicator */}
+   264→      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+   265→        <ChevronDown className="w-6 h-6 text-neutral-600" />
+   266→      </div>
+   267→    </section>
+   268→  );
+   269→}
+   270→
+   271→/* ──────────────────────────────────────────
+   272→   PAIN POINTS SECTION
+   273→   ────────────────────────────────────────── */
+   274→function PainPoints() {
+   275→  const pains = [
+   276→    {
+   277→      icon: <MessageSquare className="w-6 h-6" />,
+   278→      title: "Kalte Leads werden ignoriert",
+   279→      description:
+   280→        "Trotz teurer Werbekampagnen antworten nur wenige Interessenten. Die Conversion-Rate sinkt und dein Budget verschwindet im Nichts — weil der erste Eindruck im Chat nicht überzeugt.",
+   281→    },
+   282→    {
+   283→      icon: <CalendarCheck className="w-6 h-6" />,
+   284→      title: "Termine absagen oder nicht erscheinen",
+   285→      description:
+   286→        "Selbst wenn ein Termin gebucht wird, erscheinen viele nicht. Der Grund: Der Vertrauensaufbau fand vorher nicht statt. Ohne echte Verbindung ist jeder Termin wackelig.",
+   287→    },
+   288→    {
+   289→      icon: <Users className="w-6 h-6" />,
+   290→      title: "Keine Zeit für echten Dialog",
+   291→      description:
+   292→        "Als Coach oder Agenturinhaber bist du im Tagesgeschäft gefangen. Qualifizierte Gespräche zu führen erfordert Zeit, Geduld und Erfahrung — Ressourcen, die dir fehlen.",
+   293→    },
+   294→    {
+   295→      icon: <Shield className="w-6 h-6" />,
+   296→      title: "Skripte wirken künstlich",
+   297→      description:
+   298→        "Standardisierte Chat-Skripte spürt jeder Prospect. Was fehlt, ist Empathie, aktives Zuhören und die Fähigkeit, auf jede Situation individuell einzugehen.",
+   299→    },
+   300→  ];
+   301→
+   302→  return (
+   303→    <section className="py-20 sm:py-28 bg-neutral-950">
+   304→      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+   305→        <FadeIn>
+   306→          <div className="text-center max-w-2xl mx-auto mb-16">
+   307→            <Badge
+   308→              variant="outline"
+   309→              className="mb-4 border-red-500/30 bg-red-500/10 text-red-400 px-3 py-1 text-xs font-medium"
+   310→            >
+   311→              Das Problem
+   312→            </Badge>
+   313→            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">
+   314→              Kennst du diese Situation?
+   315→            </h2>
+   316→            <p className="mt-4 text-neutral-400 text-lg">
+   317→              Diese Herausforderungen kosten dich täglich Umsatz und Zeit.
+   318→            </p>
+   319→          </div>
+   320→        </FadeIn>
+   321→
+   322→        <div className="grid sm:grid-cols-2 gap-6">
+   323→          {pains.map((pain, i) => (
+   324→            <FadeIn key={i} delay={i * 0.1}>
+   325→              <Card className="bg-white/[0.03] border-white/10 hover:border-red-500/30 transition-colors group h-full">
+   326→                <CardContent className="p-6 sm:p-8">
+   327→                  <div className="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center text-red-400 mb-5 group-hover:bg-red-500/20 transition-colors">
+   328→                    {pain.icon}
+   329→                  </div>
+   330→                  <h3 className="text-lg font-semibold text-white mb-3">
+   331→                    {pain.title}
+   332→                  </h3>
+   333→                  <p className="text-neutral-400 leading-relaxed">
+   334→                    {pain.description}
+   335→                  </p>
+   336→                </CardContent>
+   337→              </Card>
+   338→            </FadeIn>
+   339→          ))}
+   340→        </div>
+   341→      </div>
+   342→    </section>
+   343→  );
+   344→}
+   345→
+   346→/* ──────────────────────────────────────────
+   347→   SERVICES SECTION
+   348→   ────────────────────────────────────────── */
+   349→function Services() {
+   350→  const services = [
+   351→    {
+   352→      icon: <MessageSquare className="w-7 h-7" />,
+   353→      title: "Remote Chat Setting",
+   354→      description:
+   355→        "Authentische Conversations im DM oder Chat, die Vertrauen aufbauen statt nur Informationen abzurufen. Jeder Dialog wird individuell geführt — kein Skript, keine Masche, nur echter Mensch-zu-Mensch-Kontakt. So verwandeln sich kalte Anfragen in warme Interessenten, die bereit sind, den nächsten Schritt zu gehen.",
+   356→      features: [
+   357→        "DM-Kommunikation auf Instagram, Facebook & LinkedIn",
+   358→        "Individuelle Ansprache statt Copy-Paste-Skripte",
+   359→        "Kulturell sensible Kommunikation",
+   360→        "Nahtlose Übergabe an den Vertrieb",
+   361→      ],
+   362→    },
+   363→    {
+   364→      icon: <CalendarCheck className="w-7 h-7" />,
+   365→      title: "Appointment Setting",
+   366→      description:
+   367→        "Termine, die wirklich stattfinden. Durch vorausgehenden Vertrauensaufbau im Chat sind deine Termine qualifiziert und vorbereitet. Kein No-Show, keine Enttäuschungen — nur Gespräche mit Menschen, die deine Lösung wirklich hören wollen.",
+   368→      features: [
+   369→        "Qualifizierte Terminvereinbarung",
+   370→        "Vorab-Qualifizierung jedes Leads",
+   371→        "Kalenderintegration & Reminder-Systeme",
+   372→        "Nachfass-Management für offene Termine",
+   373→      ],
+   374→    },
+   375→    {
+   376→      icon: <Users className="w-7 h-7" />,
+   377→      title: "Kundenbeziehungen & Leadqualifizierung",
+   378→      description:
+   379→        "Jeder Kunde ist eine Persönlichkeit, kein Lead in einer Datenbank. Ich identifiziere die echten Bedürfnisse hinter der Anfrage und qualifiziere deine Prospects so, dass dein Vertriebsteam nur noch relevante Gespräche führt.",
+   380→      features: [
+   381→        "Empathische Bedarfsanalyse",
+   382→        "Strukturierte Lead-Pipeline",
+   383→        "Echte Verbindungen statt Oberflächlichkeit",
+   384→        "CRM-Kompatible Dokumentation",
+   385→      ],
+   386→    },
+   387→  ];
+   388→
+   389→  return (
+   390→    <section id="services" className="py-20 sm:py-28 bg-black">
+   391→      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+   392→        <FadeIn>
+   393→          <div className="text-center max-w-2xl mx-auto mb-16">
+   394→            <Badge
+   395→              variant="outline"
+   396→              className="mb-4 border-emerald-500/30 bg-emerald-500/10 text-emerald-400 px-3 py-1 text-xs font-medium"
+   397→            >
+   398→              Meine Leistung
+   399→            </Badge>
+   400→            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">
+   401→              Was Converix für dich leistet
+   402→            </h2>
+   403→            <p className="mt-4 text-neutral-400 text-lg">
+   404→              Drei Kernleistungen, die dein Geschäft voranbringen.
+   405→            </p>
+   406→          </div>
+   407→        </FadeIn>
+   408→
+   409→        <div className="grid lg:grid-cols-3 gap-6">
+   410→          {services.map((service, i) => (
+   411→            <FadeIn key={i} delay={i * 0.15}>
+   412→              <Card className="bg-white/[0.03] border-white/10 hover:border-emerald-500/30 transition-all group h-full">
+   413→                <CardContent className="p-6 sm:p-8 flex flex-col h-full">
+   414→                  <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-6 group-hover:bg-emerald-500/20 group-hover:scale-110 transition-all">
+   415→                    {service.icon}
+   416→                  </div>
+   417→                  <h3 className="text-xl font-bold text-white mb-3">
+   418→                    {service.title}
+   419→                  </h3>
+   420→                  <p className="text-neutral-400 leading-relaxed mb-6">
+   421→                    {service.description}
+   422→                  </p>
+   423→                  <ul className="space-y-3 mt-auto">
+   424→                    {service.features.map((f, j) => (
+   425→                      <li key={j} className="flex items-start gap-3 text-sm text-neutral-300">
+   426→                        <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
+   427→                        {f}
+   428→                      </li>
+   429→                    ))}
+   430→                  </ul>
+   431→                </CardContent>
+   432→              </Card>
+   433→            </FadeIn>
+   434→          ))}
+   435→        </div>
+   436→      </div>
+   437→    </section>
+   438→  );
+   439→}
+   440→
+   441→/* ──────────────────────────────────────────
+   442→   STORY SECTION
+   443→   ────────────────────────────────────────── */
+   444→function Story() {
+   445→  const milestones = [
+   446→    {
+   447→      icon: <Briefcase className="w-5 h-5" />,
+   448→      role: "Reiseleiter",
+   449→      text: "Innerhalb weniger Minuten Vertrauen zu Menschen aufbauen, die ich zuvor noch nie gesehen hatte — eine Fähigkeit, die heute in jedem Kundengespräch wertvoll ist.",
+   450→    },
+   451→    {
+   452→      icon: <Handshake className="w-5 h-5" />,
+   453→      role: "Gastronom & Unternehmer",
+   454→      text: "Langfristiger Erfolg entsteht nicht durch einmalige Abschlüsse, sondern durch Beziehungen, die Menschen wirklich binden.",
+   455→    },
+   456→    {
+   457→      icon: <Heart className="w-5 h-5" />,
+   458→      role: "Kundenentwickler & Spa-Manager",
+   459→      text: "Empathie und Zuhören sind entscheidend — besonders dann, wenn ein Kunde noch gar nicht weiß, was er wirklich braucht.",
+   460→    },
+   461→  ];
+   462→
+   463→  return (
+   464→    <section id="story" className="py-20 sm:py-28 bg-neutral-950">
+   465→      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+   466→        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+   467→          {/* Left — Text */}
+   468→          <div>
+   469→            <FadeIn>
+   470→              <Badge
+   471→                variant="outline"
+   472→                className="mb-4 border-amber-500/30 bg-amber-500/10 text-amber-400 px-3 py-1 text-xs font-medium"
+   473→              >
+   474→                Meine Geschichte
+   475→              </Badge>
+   476→              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight">
+   477→                Mein Leben war alles andere als geradlinig.
+   478→              </h2>
+   479→            </FadeIn>
+   480→
+   481→            <FadeIn delay={0.15}>
+   482→              <p className="mt-6 text-neutral-300 text-lg leading-relaxed">
+   483→                Vom Familienbetrieb über Gastronomie, Tourismus, Vertrieb und
+   484→                Unternehmertum bis hin zur internationalen Kundenbetreuung habe
+   485→                ich eine Sache immer wieder erlebt:{" "}
+   486→                <span className="text-emerald-400 font-semibold">
+   487→                  Menschen kaufen nicht wegen Produkten. Menschen entscheiden
+   488→                  sich für Vertrauen.
+   489→                </span>
+   490→              </p>
+   491→            </FadeIn>
+   492→
+   493→            <FadeIn delay={0.25}>
+   494→              <div className="mt-6 p-6 bg-white/[0.03] border border-white/10 rounded-2xl">
+   495→                <p className="text-neutral-300 leading-relaxed italic">
+   496→                  &ldquo;Gerade im Remote Chatting entscheidet nicht das perfekte
+   497→                  Skript über den Erfolg, sondern die Fähigkeit, Menschen
+   498→                  wirklich zu verstehen. Genau hier liegt meine Stärke.&rdquo;
+   499→                </p>
+   500→                <div className="mt-4 flex items-center gap-3">
+   501→                  <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-sm">
+   502→                    EC
+   503→                  </div>
+   504→                  <div>
+   505→                    <p className="text-white font-semibold text-sm">
+   506→                      Ertan Çelik
+   507→                    </p>
+   508→                    <p className="text-neutral-500 text-xs">
+   509→                      Gründer von Converix
+   510→                    </p>
+   511→                  </div>
+   512→                </div>
+   513→              </div>
+   514→            </FadeIn>
+   515→          </div>
+   516→
+   517→          {/* Right — Milestones */}
+   518→          <div className="space-y-6">
+   519→            {milestones.map((m, i) => (
+   520→              <FadeIn key={i} delay={0.1 * (i + 1)} direction="right">
+   521→                <div className="flex gap-5 p-5 bg-white/[0.03] border border-white/10 rounded-2xl hover:border-emerald-500/20 transition-colors">
+   522→                  <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 shrink-0">
+   523→                    {m.icon}
+   524→                  </div>
+   525→                  <div>
+   526→                    <h3 className="text-white font-semibold mb-1.5">{m.role}</h3>
+   527→                    <p className="text-neutral-400 text-sm leading-relaxed">
+   528→                      {m.text}
+   529→                    </p>
+   530→                  </div>
+   531→                </div>
+   532→              </FadeIn>
+   533→            ))}
+   534→
+   535→            <FadeIn delay={0.4} direction="right">
+   536→              <div className="flex gap-5 p-5 bg-amber-500/5 border border-amber-500/20 rounded-2xl">
+   537→                <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400 shrink-0">
+   538→                  <Globe className="w-5 h-5" />
+   539→                </div>
+   540→                <div>
+   541→                  <h3 className="text-white font-semibold mb-1.5">
+   542→                    Soziales Engagement — DEKAFOK
+   543→                  </h3>
+   544→                  <p className="text-neutral-400 text-sm leading-relaxed">
+   545→                    Als Mitgründer von DEKAFOK engagiere ich mich aktiv für den
+   546→                    Schutz von Meeresschildkröten, Mittelmeerrobben und den
+   547→                    natürlich an den Stränden wachsenden Sandlilien. Wer bereit
+   548→                    ist, sich konsequent für etwas einzusetzen, das keine Stimme
+   549→                    hat, bringt dieselbe Haltung in seine Arbeit: Überzeugung,
+   550→                    Empathie und echtes Engagement.
+   551→                  </p>
+   552→                </div>
+   553→              </div>
+   554→            </FadeIn>
+   555→          </div>
+   556→        </div>
+   557→      </div>
+   558→    </section>
+   559→  );
+   560→}
+   561→
+   562→/* ──────────────────────────────────────────
+   563→   TARGET AUDIENCE SECTION
+   564→   ────────────────────────────────────────── */
+   565→function TargetAudience() {
+   566→  const audiences = [
+   567→    {
+   568→      title: "Coaches & Berater",
+   569→      description:
+   570→        "Deine Zeit gehört deinen Klienten, nicht dem Terminmanagement. Ich übernehme den gesamten Vorab-Prozess — vom ersten Chat bis zum gebuchten Beratungsgespräch.",
+   571→     challenge: "Fehlende Zeit für Akquise",
+   572→    },
+   573→    {
+   574→      title: "Marketing-Agenturen",
+   575→      description:
+   576→        "Deine Kunden zahlen für Ergebnisse, nicht für Versuche. Mit strukturiertem Chat-Setting sorgst du für messbare Conversion-Raten und zufriedene Kunden.",
+   577→      challenge: "Sinkende Conversion-Raten",
+   578→    },
+   579→    {
+   580→      title: "Online Marketer",
+   581→      description:
+   582→        "Deine Ads generieren Klicks — aber was passiert danach? Ich schließe die Lücke zwischen Klick und Kauf durch professionelle Conversations im Chat.",
+   583→      challenge: "Leads konvertieren nicht",
+   584→    },
+   585→    {
+   586→      title: "Chat Setter & Appointment Setter Teams",
+   587→      description:
+   588→        "Du suchst jemanden, der nicht nur Skripte abarbeitet, sondern echte Beziehungen aufbaut. Ich bringe 30+ Jahre Kundenkontakt-Erfahrung in dein Team ein.",
+   589→      challenge: "Eintönige Skript-Abarbeit",
+   590→    },
+   591→  ];
+   592→
+   593→  return (
+   594→    <section id="target" className="py-20 sm:py-28 bg-black">
+   595→      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+   596→        <FadeIn>
+   597→          <div className="text-center max-w-2xl mx-auto mb-16">
+   598→            <Badge
+   599→              variant="outline"
+   600→              className="mb-4 border-emerald-500/30 bg-emerald-500/10 text-emerald-400 px-3 py-1 text-xs font-medium"
+   601→            >
+   602→              Für wen
+   603→            </Badge>
+   604→            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">
+   605→              Für wen arbeite ich?
+   606→            </h2>
+   607→            <p className="mt-4 text-neutral-400 text-lg">
+   608→              Converix ist genau richtig, wenn du in einer dieser Positionen
+   609→              steckst.
+   610→            </p>
+   611→          </div>
+   612→        </FadeIn>
+   613→
+   614→        <div className="grid sm:grid-cols-2 gap-6">
+   615→          {audiences.map((a, i) => (
+   616→            <FadeIn key={i} delay={i * 0.1}>
+   617→              <Card className="bg-white/[0.03] border-white/10 hover:border-emerald-500/30 transition-all group h-full">
+   618→                <CardContent className="p-6 sm:p-8 h-full flex flex-col">
+   619→                  <Badge
+   620→                    variant="outline"
+   621→                    className="self-start mb-4 border-red-500/30 bg-red-500/10 text-red-400 text-xs px-2.5 py-0.5"
+   622→                  >
+   623→                    {a.challenge}
+   624→                  </Badge>
+   625→                  <h3 className="text-xl font-bold text-white mb-3">
+   626→                    {a.title}
+   627→                  </h3>
+   628→                  <p className="text-neutral-400 leading-relaxed">
+   629→                    {a.description}
+   630→                  </p>
+   631→                </CardContent>
+   632→              </Card>
+   633→            </FadeIn>
+   634→          ))}
+   635→        </div>
+   636→      </div>
+   637→    </section>
+   638→  );
+   639→}
+   640→
+   641→/* ──────────────────────────────────────────
+   642→   RESULTS / STATS SECTION
+   643→   ────────────────────────────────────────── */
+   644→function Results() {
+   645→  const stats = [
+   646→    { value: 30, suffix: "+", label: "Jahre Kundenkontakt-Erfahrung" },
+   647→    { value: 100, suffix: "%", label: "Authentischer Dialog, keine Skripte" },
+   648→    { value: 5, suffix: "+", label: "Branchen perfekt beherrscht" },
+   649→    { value: 24, suffix: "/7", label: "Verlässlichkeit & Verantwortung" },
+   650→  ];
+   651→
+   652→  const testimonials = [
+   653→    {
+   654→      text: "Ertan hat eine einzigartige Fähigkeit: Er baut innerhalb weniger Minuten eine Vertrauensbasis auf, die andere erst nach Wochen erreichen. Seine interkulturelle Kompetenz ist ein echter Gamechanger.",
+   655→      name: "M. Keller",
+   656→      role: "Geschäftsführer, Touristik-Unternehmen",
+   657→    },
+   658→    {
+   659→      text: "Seitdem Ertan unsere Chat-Kommunikation übernimmt, haben sich unsere Show-Raten für Termine halbiert und die Conversion im Sales-Call deutlich erhöht.",
+   660→      name: "S. Fischer",
+   661→      role: "Inhaber, Marketing-Agentur",
+   662→    },
+   663→    {
+   664→      text: "Was Ertan unterscheidet, ist seine echte Empathie. Er behandelt jeden Lead wie einen Menschen, nicht wie eine Nummer. Genau das brauchen wir im Coaching-Business.",
+   665→      name: "Dr. L. Weber",
+   666→      role: "Business Coach",
+   667→    },
+   668→  ];
+   669→
+   670→  return (
+   671→    <section id="results" className="py-20 sm:py-28 bg-neutral-950">
+   672→      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+   673→        {/* Stats */}
+   674→        <FadeIn>
+   675→          <div className="text-center max-w-2xl mx-auto mb-16">
+   676→            <Badge
+   677→              variant="outline"
+   678→              className="mb-4 border-emerald-500/30 bg-emerald-500/10 text-emerald-400 px-3 py-1 text-xs font-medium"
+   679→            >
+   680→              Zahlen & Fakten
+   681→            </Badge>
+   682→            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">
+   683→              Was mich auszeichnet
+   684→            </h2>
+   685→          </div>
+   686→        </FadeIn>
+   687→
+   688→        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+   689→          {stats.map((s, i) => (
+   690→            <FadeIn key={i} delay={i * 0.1}>
+   691→              <div className="text-center p-6 bg-white/[0.03] border border-white/10 rounded-2xl">
+   692→                <p className="text-3xl sm:text-4xl font-bold text-emerald-400">
+   693→                  <CountUp target={s.value} suffix={s.suffix} />
+   694→                </p>
+   695→                <p className="mt-2 text-sm text-neutral-400">{s.label}</p>
+   696→              </div>
+   697→            </FadeIn>
+   698→          ))}
+   699→        </div>
+   700→
+   701→        {/* Testimonials */}
+   702→        <FadeIn>
+   703→          <div className="text-center mb-12">
+   704→            <h3 className="text-2xl sm:text-3xl font-bold text-white">
+   705→              Was Partner über mich sagen
+   706→            </h3>
+   707→          </div>
+   708→        </FadeIn>
+   709→
+   710→        <div className="grid md:grid-cols-3 gap-6">
+   711→          {testimonials.map((t, i) => (
+   712→            <FadeIn key={i} delay={i * 0.15}>
+   713→              <Card className="bg-white/[0.03] border-white/10 h-full">
+   714→                <CardContent className="p-6 sm:p-8 h-full flex flex-col">
+   715→                  <Quote className="w-8 h-8 text-emerald-500/40 mb-4" />
+   716→                  <p className="text-neutral-300 leading-relaxed flex-1">
+   717→                    &ldquo;{t.text}&rdquo;
+   718→                  </p>
+   719→                  <div className="mt-6 pt-4 border-t border-white/10">
+   720→                    <div className="flex items-center gap-3">
+   721→                      <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-sm">
+   722→                        {t.name
+   723→                          .split(" ")
+   724→                          .map((n) => n[0])
+   725→                          .join("")}
+   726→                      </div>
+   727→                      <div>
+   728→                        <p className="text-white font-semibold text-sm">
+   729→                          {t.name}
+   730→                        </p>
+   731→                        <p className="text-neutral-500 text-xs">{t.role}</p>
+   732→                      </div>
+   733→                    </div>
+   734→                  </div>
+   735→                </CardContent>
+   736→              </Card>
+   737→            </FadeIn>
+   738→          ))}
+   739→        </div>
+   740→      </div>
+   741→    </section>
+   742→  );
+   743→}
+   744→
+   745→/* ──────────────────────────────────────────
+   746→   CONTACT / CTA SECTION
+   747→   ────────────────────────────────────────── */
+   748→function Contact() {
+   749→  return (
+   750→    <section id="contact" className="py-20 sm:py-28 bg-black relative overflow-hidden">
+   751→      {/* Background glow */}
+   752→      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-3xl" />
+   753→
+   754→      <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+   755→        <FadeIn>
+   756→          <div className="text-center mb-12">
+   757→            <Badge
+   758→              variant="outline"
+   759→              className="mb-4 border-emerald-500/30 bg-emerald-500/10 text-emerald-400 px-3 py-1 text-xs font-medium"
+   760→            >
+   761→              Kontakt
+   762→            </Badge>
+   763→            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">
+   764→              Lassen Sie uns sprechen.
+   765→            </h2>
+   766→            <p className="mt-4 text-neutral-400 text-lg max-w-xl mx-auto">
+   767→              Wenn Sie jemanden suchen, der Menschen nicht als Leads, sondern
+   768→              als Persönlichkeiten betrachtet — freue ich mich auf ein
+   769→              persönliches Gespräch.
+   770→            </p>
+   771→          </div>
+   772→        </FadeIn>
+   773→
+   774→        <FadeIn delay={0.15}>
+   775→          <Card className="bg-white/[0.04] border-white/10 backdrop-blur-sm">
+   776→            <CardContent className="p-6 sm:p-10">
+   777→              <form
+   778→                onSubmit={(e) => {
+   779→                  e.preventDefault();
+   780→                }}
+   781→                className="space-y-5"
+   782→              >
+   783→                <div className="grid sm:grid-cols-2 gap-5">
+   784→                  <div className="space-y-2">
+   785→                    <label className="text-sm text-neutral-300 font-medium">
+   786→                      Vorname
+   787→                    </label>
+   788→                    <Input
+   789→                      placeholder="Max"
+   790→                      className="bg-white/5 border-white/10 text-white placeholder:text-neutral-600 focus:border-emerald-500/50 h-11"
+   791→                    />
+   792→                  </div>
+   793→                  <div className="space-y-2">
+   794→                    <label className="text-sm text-neutral-300 font-medium">
+   795→                      Nachname
+   796→                    </label>
+   797→                    <Input
+   798→                      placeholder="Mustermann"
+   799→                      className="bg-white/5 border-white/10 text-white placeholder:text-neutral-600 focus:border-emerald-500/50 h-11"
+   800→                    />
+   801→                  </div>
+   802→                </div>
+   803→
+   804→                <div className="space-y-2">
+   805→                  <label className="text-sm text-neutral-300 font-medium">
+   806→                    E-Mail
+   807→                  </label>
+   808→                  <Input
+   809→                    type="email"
+   810→                    placeholder="max@beispiel.de"
+   811→                    className="bg-white/5 border-white/10 text-white placeholder:text-neutral-600 focus:border-emerald-500/50 h-11"
+   812→                  />
+   813→                </div>
+   814→
+   815→                <div className="space-y-2">
+   816→                  <label className="text-sm text-neutral-300 font-medium">
+   817→                    Was beschäftigt dich am meisten?
+   818→                  </label>
+   819→                  <Textarea
+   820→                    placeholder="Erzähl mir kurz von deiner Situation und deinen Zielen..."
+   821→                    rows={4}
+   822→                    className="bg-white/5 border-white/10 text-white placeholder:text-neutral-600 focus:border-emerald-500/50 resize-none"
+   823→                  />
+   824→                </div>
+   825→
+   826→                <Button
+   827→                  type="submit"
+   828→                  size="lg"
+   829→                  className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-full h-12 text-base"
+   830→                >
+   831→                  <Send className="w-4 h-4 mr-2" />
+   832→                  Nachricht senden
+   833→                </Button>
+   834→
+   835→                <p className="text-center text-neutral-600 text-xs">
+   836→                  Deine Daten werden vertraulich behandelt und niemals an
+   837→                  Dritte weitergegeben.
+   838→                </p>
+   839→              </form>
+   840→            </CardContent>
+   841→          </Card>
+   842→        </FadeIn>
+   843→      </div>
+   844→    </section>
+   845→  );
+   846→}
+   847→
+   848→/* ──────────────────────────────────────────
+   849→   FOOTER
+   850→   ────────────────────────────────────────── */
+   851→function Footer() {
+   852→  return (
+   853→    <footer className="bg-neutral-950 border-t border-white/5 py-12">
+   854→      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+   855→        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+   856→          {/* Logo */}
+   857→          <div className="flex items-center gap-2">
+   858→            <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
+   859→              <MessageSquare className="w-4 h-4 text-emerald-400" />
+   860→            </div>
+   861→            <span className="text-lg font-bold text-white">converix</span>
+   862→          </div>
+   863→
+   864→          {/* Tagline */}
+   865→          <p className="text-neutral-500 text-sm text-center">
+   866→            Remote Chatting · Appointment Setting · Kundenbeziehungen
+   867→          </p>
+   868→
+   869→          {/* Copyright */}
+   870→          <p className="text-neutral-600 text-sm">
+   871→            &copy; {new Date().getFullYear()} Converix. Alle Rechte vorbehalten.
+   872→          </p>
+   873→        </div>
+   874→
+   875→        {/* Social engagement note */}
+   876→        <div className="mt-8 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+   877→          <div className="flex items-center gap-3">
+   878→            <Heart className="w-4 h-4 text-amber-500" />
+   879→            <span className="text-neutral-500 text-sm">
+   880→              Mitgründer von{" "}
+   881→              <span className="text-amber-400 font-medium">DEKAFOK</span> —
+   882→              Engagement für Meeresschildkröten & Mittelmeerrobben
+   883→            </span>
+   884→          </div>
+   885→        </div>
+   886→      </div>
+   887→    </footer>
+   888→  );
+   889→}
+   890→
+   891→/* ──────────────────────────────────────────
+   892→   PAGE
+   893→   ────────────────────────────────────────── */
+   894→export default function Home() {
+   895→  return (
+   896→    <div className="min-h-screen flex flex-col bg-black">
+   897→      <Navbar />
+   898→      <main className="flex-1">
+   899→        <Hero />
+   900→        <PainPoints />
+   901→        <Services />
+   902→        <Story />
+   903→        <TargetAudience />
+   904→        <Results />
+   905→        <Contact />
+   906→      </main>
+   907→      <Footer />
+   908→    </div>
+   909→  );
+   910→}

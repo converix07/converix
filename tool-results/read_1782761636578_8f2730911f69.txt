@@ -1,0 +1,1254 @@
+     1→"use client";
+     2→
+     3→import { motion, useInView } from "framer-motion";
+     4→import { useRef } from "react";
+     5→import { Button } from "@/components/ui/button";
+     6→import { Card, CardContent } from "@/components/ui/card";
+     7→import { Badge } from "@/components/ui/badge";
+     8→import { Input } from "@/components/ui/input";
+     9→import { Textarea } from "@/components/ui/textarea";
+    10→import {
+    11→  MessageSquare,
+    12→  CalendarCheck,
+    13→  Users,
+    14→  Shield,
+    15→  Heart,
+    16→  Globe,
+    17→  ArrowRight,
+    18→  CheckCircle2,
+    19→  Send,
+    20→  Menu,
+    21→  X,
+    22→  ChevronDown,
+    23→  Quote,
+    24→  Briefcase,
+    25→  Handshake,
+    26→  Target,
+    27→  Lock,
+    28→  FileText,
+    29→  Eye,
+    30→  Scale,
+    31→  ShieldCheck,
+    32→} from "lucide-react";
+    33→import { useState } from "react";
+    34→import {
+    35→  Dialog,
+    36→  DialogContent,
+    37→  DialogHeader,
+    38→  DialogTitle,
+    39→  DialogTrigger,
+    40→} from "@/components/ui/dialog";
+    41→import { ScrollArea } from "@/components/ui/scroll-area";
+    42→
+    43→/* ──────────────────────────────────────────
+    44→   Animation helpers
+    45→   ────────────────────────────────────────── */
+    46→function FadeIn({
+    47→  children,
+    48→  delay = 0,
+    49→  className = "",
+    50→  direction = "up",
+    51→}: {
+    52→  children: React.ReactNode;
+    53→  delay?: number;
+    54→  className?: string;
+    55→  direction?: "up" | "down" | "left" | "right";
+    56→}) {
+    57→  const ref = useRef(null);
+    58→  const isInView = useInView(ref, { once: true, margin: "-60px" });
+    59→  const dirs = {
+    60→    up: { y: 40, x: 0 },
+    61→    down: { y: -40, x: 0 },
+    62→    left: { x: 40, y: 0 },
+    63→    right: { x: -40, y: 0 },
+    64→  };
+    65→  return (
+    66→    <motion.div
+    67→      ref={ref}
+    68→      initial={{ opacity: 0, ...dirs[direction] }}
+    69→      animate={isInView ? { opacity: 1, x: 0, y: 0 } : {}}
+    70→      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+    71→      className={className}
+    72→    >
+    73→      {children}
+    74→    </motion.div>
+    75→  );
+    76→}
+    77→
+    78→/* ──────────────────────────────────────────
+    79→   NAVIGATION
+    80→   ────────────────────────────────────────── */
+    81→function Navbar() {
+    82→  const [open, setOpen] = useState(false);
+    83→  const links = [
+    84→    { label: "Leistung", href: "#services" },
+    85→    { label: "Story", href: "#story" },
+    86→    { label: "Für wen", href: "#target" },
+    87→    { label: "Prozess", href: "#results" },
+    88→    { label: "Kontakt", href: "#contact" },
+    89→  ];
+    90→
+    91→  return (
+    92→    <header className="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-xl border-b border-white/10">
+    93→      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    94→        {/* Logo */}
+    95→        <a href="#" className="flex items-center gap-2 group">
+    96→          <div className="w-9 h-9 rounded-lg bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 group-hover:bg-emerald-500/30 transition-colors">
+    97→            <MessageSquare className="w-5 h-5 text-emerald-400" />
+    98→          </div>
+    99→          <span className="text-xl font-bold tracking-tight text-white">
+   100→            converix
+   101→          </span>
+   102→        </a>
+   103→
+   104→        {/* Desktop links */}
+   105→        <div className="hidden md:flex items-center gap-8">
+   106→          {links.map((l) => (
+   107→            <a
+   108→              key={l.href}
+   109→              href={l.href}
+   110→              className="text-sm text-neutral-400 hover:text-white transition-colors"
+   111→            >
+   112→              {l.label}
+   113→            </a>
+   114→          ))}
+   115→          <Button
+   116→            asChild
+   117→            className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-full px-6"
+   118→          >
+   119→            <a href="#contact">Gespräch buchen</a>
+   120→          </Button>
+   121→        </div>
+   122→
+   123→        {/* Mobile toggle */}
+   124→        <button
+   125→          className="md:hidden text-white"
+   126→          onClick={() => setOpen(!open)}
+   127→          aria-label="Menü öffnen"
+   128→        >
+   129→          {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+   130→        </button>
+   131→      </nav>
+   132→
+   133→      {/* Mobile menu */}
+   134→      {open && (
+   135→        <motion.div
+   136→          initial={{ opacity: 0, y: -10 }}
+   137→          animate={{ opacity: 1, y: 0 }}
+   138→          className="md:hidden bg-black/95 backdrop-blur-xl border-b border-white/10 px-4 pb-6 pt-2"
+   139→        >
+   140→          {links.map((l) => (
+   141→            <a
+   142→              key={l.href}
+   143→              href={l.href}
+   144→              onClick={() => setOpen(false)}
+   145→              className="block py-3 text-neutral-300 hover:text-white transition-colors"
+   146→            >
+   147→              {l.label}
+   148→            </a>
+   149→          ))}
+   150→          <Button
+   151→            asChild
+   152→            className="w-full mt-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-full"
+   153→          >
+   154→            <a href="#contact" onClick={() => setOpen(false)}>
+   155→              Gespräch buchen
+   156→            </a>
+   157→          </Button>
+   158→        </motion.div>
+   159→      )}
+   160→    </header>
+   161→  );
+   162→}
+   163→
+   164→/* ──────────────────────────────────────────
+   165→   HERO SECTION
+   166→   ────────────────────────────────────────── */
+   167→function Hero() {
+   168→  return (
+   169→    <section className="relative min-h-screen flex items-center justify-center bg-black">
+   170→      {/* Background gradient */}
+   171→      <div className="absolute inset-0 overflow-hidden">
+   172→        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/8 rounded-full blur-3xl" />
+   173→        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-emerald-600/5 rounded-full blur-3xl" />
+   174→        <div className="absolute top-1/2 right-0 w-[400px] h-[400px] bg-teal-500/5 rounded-full blur-3xl" />
+   175→        {/* Grid overlay */}
+   176→        <div
+   177→          className="absolute inset-0 opacity-[0.03]"
+   178→          style={{
+   179→            backgroundImage:
+   180→              "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)",
+   181→            backgroundSize: "60px 60px",
+   182→          }}
+   183→        />
+   184→      </div>
+   185→
+   186→      <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 pt-14 sm:pt-20 pb-8">
+   187→        <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+   188→          {/* Left — Text content */}
+   189→          <div className="flex-1 text-center lg:text-left">
+   190→            <FadeIn delay={0}>
+   191→              <Badge
+   192→                variant="outline"
+   193→                className="mb-5 sm:mb-6 border-emerald-500/30 bg-emerald-500/10 text-emerald-400 px-3 py-1 text-[11px] sm:px-4 sm:py-1.5 sm:text-sm font-medium"
+   194→              >
+   195→                <MessageSquare className="w-3 h-3 sm:w-3.5 sm:h-3.5 mr-1.5 sm:mr-2 shrink-0" />
+   196→                <span className="hidden sm:inline">Remote Chatting · Appointment Setting · Kundenbeziehungen</span>
+   197→                <span className="sm:hidden">Chat Setting · Appointment Setting</span>
+   198→              </Badge>
+   199→            </FadeIn>
+   200→
+   201→            <FadeIn delay={0.1}>
+   202→              <h1 className="text-[1.65rem] leading-[1.2] sm:text-5xl sm:leading-[1.08] md:text-6xl lg:text-7xl lg:leading-[1.08] font-bold text-white tracking-tight">
+   203→                Menschen kaufen nicht
+   204→                <br />
+   205→                wegen Produkten.
+   206→                <br />
+   207→                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">
+   208→                  Menschen entscheiden sich
+   209→                  <br className="sm:hidden" />
+   210→                  {" "}für Vertrauen.
+   211→                </span>
+   212→              </h1>
+   213→            </FadeIn>
+   214→
+   215→            <FadeIn delay={0.25}>
+   216→              <p className="mt-5 sm:mt-8 text-[15px] sm:text-xl text-neutral-400 max-w-2xl lg:mx-0 mx-auto leading-relaxed px-1 lg:px-0">
+   217→                Converix verwandelt Interessenten in qualifizierte Termine —
+   218→                durch authentischen Dialog, interkulturelle Kompetenz und über
+   219→                30 Jahre Erfahrung im direkten Kundenkontakt.
+   220→              </p>
+   221→            </FadeIn>
+   222→
+   223→            <FadeIn delay={0.4}>
+   224→              <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start px-1 lg:px-0">
+   225→                <Button
+   226→                  asChild
+   227→                  size="lg"
+   228→                  className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-full px-6 sm:px-8 text-sm sm:text-base h-11 sm:h-12 w-full sm:w-auto"
+   229→                >
+   230→                  <a href="#contact">
+   231→                    Jetzt Gespräch anfragen
+   232→                    <ArrowRight className="w-4 h-4 ml-2" />
+   233→                  </a>
+   234→                </Button>
+   235→                <Button
+   236→                  asChild
+   237→                  variant="outline"
+   238→                  size="lg"
+   239→                  className="border-white/20 text-white hover:bg-white/5 rounded-full px-6 sm:px-8 text-sm sm:text-base h-11 sm:h-12 w-full sm:w-auto"
+   240→                >
+   241→                  <a href="#story">Meine Geschichte</a>
+   242→                </Button>
+   243→              </div>
+   244→            </FadeIn>
+   245→
+   246→            {/* Trust badges */}
+   247→            <FadeIn delay={0.55}>
+   248→              <div className="mt-10 sm:mt-14 flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-10 text-neutral-500 text-xs sm:text-sm">
+   249→                <div className="flex items-center gap-1.5 sm:gap-2">
+   250→                  <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-500" />
+   251→                  <span>30+ Jahre Erfahrung</span>
+   252→                </div>
+   253→                <div className="flex items-center gap-1.5 sm:gap-2">
+   254→                  <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-500" />
+   255→                  <span>Interkulturelle Kompetenz</span>
+   256→                </div>
+   257→                <div className="flex items-center gap-1.5 sm:gap-2">
+   258→                  <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-500" />
+   259→                  <span>Remote verfügbar</span>
+   260→                </div>
+   261→              </div>
+   262→            </FadeIn>
+   263→          </div>
+   264→
+   265→          {/* Right — Profile photo (desktop only) */}
+   266→          <FadeIn delay={0.3} direction="left" className="hidden lg:block shrink-0">
+   267→            <div className="relative">
+   268→              <div className="w-72 h-96 rounded-3xl overflow-hidden border-2 border-emerald-500/20 shadow-2xl shadow-emerald-500/5">
+   269→                <img
+   270→                  src="/ertan-celik.png"
+   271→                  alt="Ertan Çelik"
+   272→                  className="w-full h-full object-cover object-top"
+   273→                />
+   274→              </div>
+   275→              {/* Name badge */}
+   276→              <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-neutral-900/90 backdrop-blur-sm border border-white/10 rounded-2xl px-5 py-3 text-center">
+   277→                <p className="text-white font-semibold text-sm">Ertan Çelik</p>
+   278→                <p className="text-emerald-400 text-xs">Gründer von Converix</p>
+   279→              </div>
+   280→            </div>
+   281→          </FadeIn>
+   282→        </div>
+   283→      </div>
+   284→
+   285→      {/* Scroll indicator */}
+   286→      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+   287→        <ChevronDown className="w-6 h-6 text-neutral-600" />
+   288→      </div>
+   289→    </section>
+   290→  );
+   291→}
+   292→
+   293→/* ──────────────────────────────────────────
+   294→   PAIN POINTS SECTION
+   295→   ────────────────────────────────────────── */
+   296→function PainPoints() {
+   297→  const pains = [
+   298→    {
+   299→      icon: <MessageSquare className="w-6 h-6" />,
+   300→      title: "Anfragen bleiben unbeantwortet",
+   301→      description:
+   302→        "Trotz teurer Werbekampagnen antworten nur wenige Interessenten. Die Conversion-Rate sinkt und dein Budget verschwindet im Nichts — weil der erste Eindruck im Chat nicht überzeugt.",
+   303→    },
+   304→    {
+   305→      icon: <CalendarCheck className="w-6 h-6" />,
+   306→      title: "Termine absagen oder nicht erscheinen",
+   307→      description:
+   308→        "Selbst wenn ein Termin gebucht wird, erscheinen viele nicht. Der Grund: Der Vertrauensaufbau fand vorher nicht statt. Ohne echte Verbindung ist jeder Termin wackelig.",
+   309→    },
+   310→    {
+   311→      icon: <Users className="w-6 h-6" />,
+   312→      title: "Keine Zeit für echten Dialog",
+   313→      description:
+   314→        "Als Coach oder Agenturinhaber bist du im Tagesgeschäft gefangen. Qualifizierte Gespräche zu führen erfordert Zeit, Geduld und Erfahrung — Ressourcen, die dir fehlen.",
+   315→    },
+   316→    {
+   317→      icon: <Shield className="w-6 h-6" />,
+   318→      title: "Skripte wirken künstlich",
+   319→      description:
+   320→        "Standardisierte Chat-Skripte spürt jeder Prospect. Was fehlt, ist Empathie, aktives Zuhören und die Fähigkeit, auf jede Situation individuell einzugehen.",
+   321→    },
+   322→  ];
+   323→
+   324→  return (
+   325→    <section className="py-20 sm:py-28 bg-neutral-950">
+   326→      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+   327→        <FadeIn>
+   328→          <div className="text-center max-w-2xl mx-auto mb-16">
+   329→            <Badge
+   330→              variant="outline"
+   331→              className="mb-4 border-red-500/30 bg-red-500/10 text-red-400 px-3 py-1 text-xs font-medium"
+   332→            >
+   333→              Das Problem
+   334→            </Badge>
+   335→            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">
+   336→              Kennst du diese Situation?
+   337→            </h2>
+   338→            <p className="mt-4 text-neutral-400 text-lg">
+   339→              Diese Herausforderungen kosten dich täglich Umsatz und Zeit.
+   340→            </p>
+   341→          </div>
+   342→        </FadeIn>
+   343→
+   344→        <div className="grid sm:grid-cols-2 gap-6">
+   345→          {pains.map((pain, i) => (
+   346→            <FadeIn key={i} delay={i * 0.1}>
+   347→              <Card className="bg-white/[0.03] border-white/10 hover:border-red-500/30 transition-colors group h-full">
+   348→                <CardContent className="p-6 sm:p-8">
+   349→                  <div className="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center text-red-400 mb-5 group-hover:bg-red-500/20 transition-colors">
+   350→                    {pain.icon}
+   351→                  </div>
+   352→                  <h3 className="text-lg font-semibold text-white mb-3">
+   353→                    {pain.title}
+   354→                  </h3>
+   355→                  <p className="text-neutral-400 leading-relaxed">
+   356→                    {pain.description}
+   357→                  </p>
+   358→                </CardContent>
+   359→              </Card>
+   360→            </FadeIn>
+   361→          ))}
+   362→        </div>
+   363→      </div>
+   364→    </section>
+   365→  );
+   366→}
+   367→
+   368→/* ──────────────────────────────────────────
+   369→   SERVICES SECTION
+   370→   ────────────────────────────────────────── */
+   371→function Services() {
+   372→  const services = [
+   373→    {
+   374→      icon: <MessageSquare className="w-7 h-7" />,
+   375→      title: "Chat Setting",
+   376→      description:
+   377→        "Authentische Dialoge im DM oder Chat, die innerhalb kürzester Zeit eine echte Verbindung aufbauen — unabhängig von Alter, Herkunft oder Hintergrund. Kein Skript, keine Masche, nur individueller Mensch-zu-Mensch-Kontakt. So verwandeln sich neugierige Anfragen in motivierte Interessenten, die bereit sind, den nächsten Schritt zu gehen.",
+   378→      features: [
+   379→        "DM-Kommunikation auf Instagram, Facebook & LinkedIn",
+   380→        "Individuelle Ansprache statt Copy-Paste-Skripte",
+   381→        "Kulturell sensible Kommunikation",
+   382→        "Nahtlose Übergabe an den Vertrieb",
+   383→      ],
+   384→    },
+   385→    {
+   386→      icon: <CalendarCheck className="w-7 h-7" />,
+   387→      title: "Appointment Setting",
+   388→      description:
+   389→        "Termine, die wirklich stattfinden. Durch vorausgehenden Vertrauensaufbau im Chat sind deine Termine qualifiziert und vorbereitet. Kein No-Show, keine Enttäuschungen — nur Gespräche mit Menschen, die deine Lösung wirklich hören wollen.",
+   390→      features: [
+   391→        "Qualifizierte Terminvereinbarung",
+   392→        "Vorab-Qualifizierung jedes Leads",
+   393→        "Kalenderintegration & Reminder-Systeme",
+   394→        "Nachfass-Management für offene Termine",
+   395→      ],
+   396→    },
+   397→    {
+   398→      icon: <Users className="w-7 h-7" />,
+   399→      title: "Leadqualifizierung & Kundenbindung",
+   400→      description:
+   401→        "Jeder Mensch ist eine Persönlichkeit, kein Lead in einer Datenbank. Ich identifiziere die echten Bedürfnisse hinter der Anfrage — besonders dann, wenn ein Kunde noch gar nicht weiß, was er wirklich braucht. So wird dein Vertriebsteam nur noch relevante Gespräche führen.",
+   402→      features: [
+   403→        "Empathische Bedarfsanalyse",
+   404→        "Strukturierte Qualifizierungs-Pipeline",
+   405→        "Langfristige Kundenbeziehungen statt Einmalgeschäfte",
+   406→        "CRM-Kompatible Dokumentation",
+   407→      ],
+   408→    },
+   409→  ];
+   410→
+   411→  return (
+   412→    <section id="services" className="py-20 sm:py-28 bg-black">
+   413→      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+   414→        <FadeIn>
+   415→          <div className="text-center max-w-2xl mx-auto mb-16">
+   416→            <Badge
+   417→              variant="outline"
+   418→              className="mb-4 border-emerald-500/30 bg-emerald-500/10 text-emerald-400 px-3 py-1 text-xs font-medium"
+   419→            >
+   420→              Meine Leistung
+   421→            </Badge>
+   422→            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">
+   423→              Was Converix für dich leistet
+   424→            </h2>
+   425→            <p className="mt-4 text-neutral-400 text-lg">
+   426→              Gerade im Remote Chatting entscheidet nicht das perfekte Skript über den Erfolg, sondern die Fähigkeit, Menschen wirklich zu verstehen.
+   427→            </p>
+   428→          </div>
+   429→        </FadeIn>
+   430→
+   431→        <div className="grid lg:grid-cols-3 gap-6">
+   432→          {services.map((service, i) => (
+   433→            <FadeIn key={i} delay={i * 0.15}>
+   434→              <Card className="bg-white/[0.03] border-white/10 hover:border-emerald-500/30 transition-all group h-full">
+   435→                <CardContent className="p-6 sm:p-8 flex flex-col h-full">
+   436→                  <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-6 group-hover:bg-emerald-500/20 group-hover:scale-110 transition-all">
+   437→                    {service.icon}
+   438→                  </div>
+   439→                  <h3 className="text-xl font-bold text-white mb-3">
+   440→                    {service.title}
+   441→                  </h3>
+   442→                  <p className="text-neutral-400 leading-relaxed mb-6">
+   443→                    {service.description}
+   444→                  </p>
+   445→                  <ul className="space-y-3 mt-auto">
+   446→                    {service.features.map((f, j) => (
+   447→                      <li key={j} className="flex items-start gap-3 text-sm text-neutral-300">
+   448→                        <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
+   449→                        {f}
+   450→                      </li>
+   451→                    ))}
+   452→                  </ul>
+   453→                </CardContent>
+   454→              </Card>
+   455→            </FadeIn>
+   456→          ))}
+   457→        </div>
+   458→      </div>
+   459→    </section>
+   460→  );
+   461→}
+   462→
+   463→/* ──────────────────────────────────────────
+   464→   STORY SECTION
+   465→   ────────────────────────────────────────── */
+   466→function Story() {
+   467→  const milestones = [
+   468→    {
+   469→      icon: <Briefcase className="w-5 h-5" />,
+   470→      role: "Friseurausbildung, Ulm",
+   471→      year: "",
+   472→      text: "Die Schule der Geduld und des Zuhörens — hier habe ich gelernt, dass jeder Mensch eine Geschichte hat, die es wert ist, gehört zu werden.",
+   473→    },
+   474→    {
+   475→      icon: <Briefcase className="w-5 h-5" />,
+   476→      role: "Familienbetrieb Antalya Kebap Salon",
+   477→      year: "",
+   478→      text: "Erste unternehmerische Praxis. Gelernt, dass ein Geschäft nur dann funktioniert, wenn Gäste sich willkommen und wertgeschätzt fühlen.",
+   479→    },
+   480→    {
+   481→      icon: <Globe className="w-5 h-5" />,
+   482→      role: "Reiseleiter, GTI German Travel International",
+   483→      year: "",
+   484→      text: "Innerhalb weniger Minuten Vertrauen zu internationalen Gruppen aufbauen, die ich zuvor nie gesehen hatte — eine Fähigkeit, die heute in jedem Kundengespräch wertvoll ist.",
+   485→    },
+   486→    {
+   487→      icon: <Handshake className="w-5 h-5" />,
+   488→      role: "Gastronom & Unternehmer",
+   489→      year: "",
+   490→      text: "Side Bistro Senden, Arocaria Hotel Side, Illertal Stuben Fellheim — langfristiger Erfolg entsteht nicht durch einmalige Abschlüsse, sondern durch Beziehungen, die Menschen wirklich binden.",
+   491→    },
+   492→    {
+   493→      icon: <Target className="w-5 h-5" />,
+   494→      role: "Photovoltaik & Touristik-Unternehmer",
+   495→      year: "",
+   496→      text: "Verkauf erneuerbarer Energien und Gründung der Ausflugsagentur Efe's & Charly's Ausflüge — strategisches Denken und unternehmerische Eigenverantwortung.",
+   497→    },
+   498→    {
+   499→      icon: <Heart className="w-5 h-5" />,
+   500→      role: "Hotel Guide",
+   501→      year: "",
+   502→      text: "Betreuung internationaler Gäste mit Empathie und aktivem Zuhören — besonders dann, wenn ein Gast noch gar nicht weiß, was er wirklich braucht.",
+   503→    },
+   504→    {
+   505→      icon: <MessageSquare className="w-5 h-5" />,
+   506→      role: "Setter im Online Marketing",
+   507→      year: "Heute",
+   508→      text: "Professionelles Chat Setting und Appointment Setting für Coaches, Agenturen und Online Marketer — die Summe aus 30+ Jahren direktem Kundenkontakt, fließt in jeden einzelnen Dialog ein.",
+   509→    },
+   510→  ];
+   511→
+   512→  return (
+   513→    <section id="story" className="py-20 sm:py-28 bg-neutral-950">
+   514→      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+   515→        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+   516→          {/* Left — Intro + Profile */}
+   517→          <div>
+   518→            <FadeIn>
+   519→              <Badge
+   520→                variant="outline"
+   521→                className="mb-4 border-amber-500/30 bg-amber-500/10 text-amber-400 px-3 py-1 text-xs font-medium"
+   522→              >
+   523→                Meine Geschichte
+   524→              </Badge>
+   525→              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight">
+   526→                Mein Leben war alles andere als geradlinig — und genau das ist meine größte Stärke.
+   527→              </h2>
+   528→            </FadeIn>
+   529→
+   530→            <FadeIn delay={0.15}>
+   531→              <p className="mt-6 text-neutral-300 text-lg leading-relaxed">
+   532→                Mein Name ist Ertan Çelik. Gebürtiger Ulmer, Sohn einer Gastarbeiterfamilie, 50 Jahre jung, stolzer Vater von drei Töchtern. Heute lebe ich in Antalya — eine bewusste Entscheidung für Lebensqualität, Internationalität und ortsunabhängige Professionalität. Vom Familienbetrieb über Gastronomie, Tourismus, Vertrieb und Unternehmertum bis hin zur internationalen Kundenbetreuung habe ich in über 30 Jahren eine Sache immer wieder erlebt:{" "}
+   533→                <span className="text-emerald-400 font-semibold">
+   534→                  Menschen kaufen nicht wegen Produkten. Menschen entscheiden sich für Vertrauen.
+   535→                </span>
+   536→              </p>
+   537→            </FadeIn>
+   538→
+   539→            <FadeIn delay={0.25}>
+   540→              <p className="mt-4 text-neutral-400 leading-relaxed">
+   541→                Ich habe in verschiedensten Branchen gearbeitet — von Coaching und Persönlichkeitsentwicklung über Finanzen und Investment bis hin zur internationalen Gastronomie. Dabei habe ich gelernt: Nachhaltiger Erfolg entsteht nicht durch Fachwissen allein, sondern durch Menschen, die Verantwortung übernehmen, strategisch denken und Vertrauen aufbauen. Ich erfülle nicht nur Aufgaben, sondern verstehe Zusammenhänge, erkenne Potenziale und trage aktiv zum Erfolg jedes Unternehmens bei, mit dem ich zusammenarbeite.
+   542→              </p>
+   543→            </FadeIn>
+   544→
+   545→            {/* Profile photo */}
+   546→            <FadeIn delay={0.35}>
+   547→              <div className="mt-8 flex items-center gap-4 p-5 bg-white/[0.03] border border-white/10 rounded-2xl">
+   548→                <img
+   549→                  src="/ertan-celik.png"
+   550→                  alt="Ertan Çelik"
+   551→                  className="w-16 h-16 rounded-full object-cover object-top border-2 border-emerald-500/30 shrink-0"
+   552→                />
+   553→                <div>
+   554→                  <p className="text-white font-semibold">Ertan Çelik</p>
+   555→                  <p className="text-neutral-400 text-sm">Gründer von Converix</p>
+   556→                  <p className="text-neutral-500 text-xs mt-1">Antalya, Türkei · Remote verfügbar</p>
+   557→                </div>
+   558→              </div>
+   559→            </FadeIn>
+   560→          </div>
+   561→
+   562→          {/* Right — Career Timeline */}
+   563→          <div className="space-y-4">
+   564→            <FadeIn delay={0.1} direction="right">
+   565→              <p className="text-xs font-medium text-emerald-400 uppercase tracking-widest mb-4">Beruflicher Werdegang</p>
+   566→            </FadeIn>
+   567→            {milestones.map((m, i) => (
+   568→              <FadeIn key={i} delay={0.08 * (i + 1)} direction="right">
+   569→                <div className="flex gap-4 p-4 sm:p-5 bg-white/[0.03] border border-white/10 rounded-2xl hover:border-emerald-500/20 transition-colors">
+   570→                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 shrink-0">
+   571→                    {m.icon}
+   572→                  </div>
+   573→                  <div className="min-w-0">
+   574→                    <div className="flex items-center gap-2 flex-wrap">
+   575→                      <h3 className="text-white font-semibold text-sm sm:text-base">{m.role}</h3>
+   576→                      {m.year && (
+   577→                        <span className="text-neutral-600 text-xs font-mono">{m.year}</span>
+   578→                      )}
+   579→                    </div>
+   580→                    <p className="text-neutral-400 text-sm leading-relaxed mt-1">
+   581→                      {m.text}
+   582→                    </p>
+   583→                  </div>
+   584→                </div>
+   585→              </FadeIn>
+   586→            ))}
+   587→
+   588→            <FadeIn delay={0.6} direction="right">
+   589→              <div className="flex gap-4 p-4 sm:p-5 bg-amber-500/5 border border-amber-500/20 rounded-2xl">
+   590→                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400 shrink-0">
+   591→                  <Globe className="w-5 h-5" />
+   592→                </div>
+   593→                <div>
+   594→                  <h3 className="text-white font-semibold text-sm sm:text-base">
+   595→                    Soziales Engagement — DEKAFOK
+   596→                  </h3>
+   597→                  <p className="text-neutral-400 text-sm leading-relaxed mt-1">
+   598→                    Als Mitgründer von DEKAFOK engagiere ich mich aktiv für den
+   599→                    Schutz von Meeresschildkröten, Mittelmeerrobben und den
+   600→                    natürlich an den Stränden wachsenden Sandlilien. Wer bereit
+   601→                    ist, sich konsequent für etwas einzusetzen, das keine Stimme
+   602→                    hat, bringt dieselbe Haltung in seine Arbeit.
+   603→                  </p>
+   604→                </div>
+   605→              </div>
+   606→            </FadeIn>
+   607→          </div>
+   608→        </div>
+   609→      </div>
+   610→    </section>
+   611→  );
+   612→}
+   613→
+   614→/* ──────────────────────────────────────────
+   615→   VALUES SECTION
+   616→   ────────────────────────────────────────── */
+   617→function Values() {
+   618→  const values = [
+   619→    {
+   620→      title: "Ehrlichkeit",
+   621→      description: "Klare, direkte Kommunikation ohne Umwege. Keine leeren Versprechen, keine versteckten Agenden — was ich sage, das halte ich. Transparenz ist die Grundlage jeder Zusammenarbeit, die Bestand hat.",
+   622→      icon: <Eye className="w-5 h-5" />,
+   623→    },
+   624→    {
+   625→      title: "Respekt",
+   626→      description: "Jeder Mensch verdient Wertschätzung, unabhängig von Position oder Herkunft. Ich begegne Menschen auf Augenhöhe — im Chat wie im Leben. Diese Haltung habe ich als Sohn einer Gastarbeiterfamilie in Ulm von klein auf gelebt.",
+   627→      icon: <Heart className="w-5 h-5" />,
+   628→    },
+   629→    {
+   630→      title: "Zuverlässigkeit",
+   631→      description: "Versprechen halte ich ein, auch wenn es unbequem wird. Verbindlichkeit ist kein Bonus, sondern die Grundlage jeder Zusammenarbeit. Geduld und Verbindlichkeit sind für mich keine weichen Werte — sie sind Geschäftsgrundlage.",
+   632→      icon: <ShieldCheck className="w-5 h-5" />,
+   633→    },
+   634→    {
+   635→      title: "Augenhöhe",
+   636→      description: "Erfolgreiche Zusammenarbeit entsteht durch gegenseitiges Vertrauen. Ich bin kein Dienstleister, der Befehle ausführt — ich bin ein Partner, der mitdenkt, strategische Lösungen entwickelt und gemeinsame Ziele erreicht.",
+   637→      icon: <Scale className="w-5 h-5" />,
+   638→    },
+   639→  ];
+   640→
+   641→  return (
+   642→    <section className="py-20 sm:py-28 bg-black">
+   643→      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+   644→        <FadeIn>
+   645→          <div className="text-center max-w-2xl mx-auto mb-16">
+   646→            <Badge
+   647→              variant="outline"
+   648→              className="mb-4 border-amber-500/30 bg-amber-500/10 text-amber-400 px-3 py-1 text-xs font-medium"
+   649→            >
+   650→              Meine Werte
+   651→            </Badge>
+   652→            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">
+   653→              Nicht nur Worte. Gelebte Haltung.
+   654→            </h2>
+   655→            <p className="mt-4 text-neutral-400 text-lg">
+   656→              Als Vater von drei Töchtern weiß ich aus tiefer Überzeugung: Geduld, Verbindlichkeit und echtes Interesse an Menschen sind keine weichen Faktoren — sie sind der Kern jedes nachhaltigen Erfolgs.
+   657→            </p>
+   658→          </div>
+   659→        </FadeIn>
+   660→
+   661→        <div className="grid sm:grid-cols-2 gap-6">
+   662→          {values.map((v, i) => (
+   663→            <FadeIn key={i} delay={i * 0.1}>
+   664→              <Card className="bg-white/[0.03] border-white/10 hover:border-amber-500/30 transition-all group h-full">
+   665→                <CardContent className="p-6 sm:p-8 h-full">
+   666→                  <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400 mb-4 group-hover:bg-amber-500/20 transition-colors">
+   667→                    {v.icon}
+   668→                  </div>
+   669→                  <h3 className="text-xl font-bold text-white mb-3">{v.title}</h3>
+   670→                  <p className="text-neutral-400 leading-relaxed">
+   671→                    {v.description}
+   672→                  </p>
+   673→                </CardContent>
+   674→              </Card>
+   675→            </FadeIn>
+   676→          ))}
+   677→        </div>
+   678→      </div>
+   679→    </section>
+   680→  );
+   681→}
+   682→
+   683→/* ──────────────────────────────────────────
+   684→   STRENGTHS / USP SECTION
+   685→   ────────────────────────────────────────── */
+   686→function Strengths() {
+   687→  const strengths = [
+   688→    {
+   689→      title: "Authentische Kommunikation",
+   690→      description: "Ich spreche mit Menschen, nicht zu ihnen. Keine Skripte, keine Maschen — jeder Dialog wird individuell und ehrlich geführt. Was mich von vielen anderen unterscheidet: Ich verstehe die Zusammenhänge hinter den Worten.",
+   691→    },
+   692→    {
+   693→      title: "Vertrauensaufbau",
+   694→      description: "Nachhaltig, ehrlich und auf Augenhöhe. Wie als Reiseleiter: Innerhalb weniger Minuten entsteht eine Verbindung, die andere erst nach Wochen erreichen. Vertrauen ist kein Nebeneffekt — es ist meine Methode.",
+   695→    },
+   696→    {
+   697→      title: "Kulturelle Sensibilität",
+   698→      description: "Als Sohn einer Gastarbeiterfamilie war Brückenbauen keine Option, sondern tägliche Notwendigkeit. Ich kommuniziere brückenbauend — über Grenzen, Kulturen und Sprachen hinweg.",
+   699→    },
+   700→    {
+   701→      title: "Strategisches Denken",
+   702→      description: "Herausforderungen schnell erkennen, Chancen analysieren und daraus nachhaltige Lösungen entwickeln. Ich erfülle nicht nur Aufgaben, sondern verstehe das große Ganze und trage aktiv zum Unternehmenserfolg bei.",
+   703→    },
+   704→    {
+   705→      title: "Empathie & Zuhören",
+   706→      description: "Besonders dann, wenn ein Kunde noch gar nicht weiß, was er wirklich braucht. Ich identifiziere die echten Bedürfnisse hinter der Anfrage — und schaffe dadurch echten Mehrwert.",
+   707→    },
+   708→    {
+   709→      title: "Remote-Kompetenz",
+   710→      description: "Seit Jahren erfolgreich standortunabhängig tätig. Strukturiert, eigenverantwortlich und zielorientiert. Auch über Distanz baue ich starke, vertrauensvolle Beziehungen auf.",
+   711→    },
+   712→  ];
+   713→
+   714→  return (
+   715→    <section className="py-20 sm:py-28 bg-neutral-950">
+   716→      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+   717→        <FadeIn>
+   718→          <div className="text-center max-w-2xl mx-auto mb-16">
+   719→            <Badge
+   720→              variant="outline"
+   721→              className="mb-4 border-emerald-500/30 bg-emerald-500/10 text-emerald-400 px-3 py-1 text-xs font-medium"
+   722→            >
+   723→              Meine Stärken
+   724→            </Badge>
+   725→            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">
+   726→              Fähigkeiten, die kein Seminar vermitteln kann.
+   727→            </h2>
+   728→            <p className="mt-4 text-neutral-400 text-lg">
+   729→              Durch jahrzehntelange Erfahrung im direkten Umgang mit Menschen aus verschiedensten Kulturen und Lebenswelten.
+   730→            </p>
+   731→          </div>
+   732→        </FadeIn>
+   733→
+   734→        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+   735→          {strengths.map((s, i) => (
+   736→            <FadeIn key={i} delay={i * 0.08}>
+   737→              <Card className="bg-white/[0.03] border-white/10 hover:border-emerald-500/30 transition-all group h-full">
+   738→                <CardContent className="p-6 h-full flex flex-col">
+   739→                  <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 font-bold text-sm mb-4 group-hover:bg-emerald-500/20 transition-colors">
+   740→                    {String(i + 1).padStart(2, "0")}
+   741→                  </div>
+   742→                  <h3 className="text-lg font-bold text-white mb-2">{s.title}</h3>
+   743→                  <p className="text-neutral-400 text-sm leading-relaxed">{s.description}</p>
+   744→                </CardContent>
+   745→              </Card>
+   746→            </FadeIn>
+   747→          ))}
+   748→        </div>
+   749→      </div>
+   750→    </section>
+   751→  );
+   752→}
+   753→
+   754→/* ──────────────────────────────────────────
+   755→   TARGET AUDIENCE SECTION
+   756→   ────────────────────────────────────────── */
+   757→function TargetAudience() {
+   758→  const audiences = [
+   759→    {
+   760→      title: "Coaches & Berater",
+   761→      description:
+   762→        "Deine Zeit gehört deinen Klienten, nicht dem Terminmanagement. Ich übernehme den gesamten Vorab-Prozess — vom ersten Chat bis zum gebuchten Beratungsgespräch.",
+   763→     challenge: "Fehlende Zeit für Akquise",
+   764→    },
+   765→    {
+   766→      title: "Marketing-Agenturen",
+   767→      description:
+   768→        "Deine Kunden zahlen für Ergebnisse, nicht für Versuche. Mit strukturiertem Chat-Setting sorgst du für messbare Conversion-Raten und zufriedene Kunden.",
+   769→      challenge: "Sinkende Conversion-Raten",
+   770→    },
+   771→    {
+   772→      title: "Online Marketer",
+   773→      description:
+   774→        "Deine Ads generieren Klicks — aber was passiert danach? Ich schließe die Lücke zwischen Klick und Kauf durch professionelle Conversations im Chat.",
+   775→      challenge: "Leads konvertieren nicht",
+   776→    },
+   777→    {
+   778→      title: "Chat Setter & Appointment Setter Teams",
+   779→      description:
+   780→        "Du suchst jemanden, der nicht nur Skripte abarbeitet, sondern echte Beziehungen aufbaut. Ich bringe 30+ Jahre Kundenkontakt-Erfahrung in dein Team ein.",
+   781→      challenge: "Eintönige Skript-Abarbeit",
+   782→    },
+   783→  ];
+   784→
+   785→  return (
+   786→    <section id="target" className="py-20 sm:py-28 bg-black">
+   787→      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+   788→        <FadeIn>
+   789→          <div className="text-center max-w-2xl mx-auto mb-16">
+   790→            <Badge
+   791→              variant="outline"
+   792→              className="mb-4 border-emerald-500/30 bg-emerald-500/10 text-emerald-400 px-3 py-1 text-xs font-medium"
+   793→            >
+   794→              Für wen
+   795→            </Badge>
+   796→            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">
+   797→              Für wen arbeite ich?
+   798→            </h2>
+   799→            <p className="mt-4 text-neutral-400 text-lg">
+   800→              Converix ist genau richtig, wenn du in einer dieser Positionen
+   801→              steckst.
+   802→            </p>
+   803→          </div>
+   804→        </FadeIn>
+   805→
+   806→        <div className="grid sm:grid-cols-2 gap-6">
+   807→          {audiences.map((a, i) => (
+   808→            <FadeIn key={i} delay={i * 0.1}>
+   809→              <Card className="bg-white/[0.03] border-white/10 hover:border-emerald-500/30 transition-all group h-full">
+   810→                <CardContent className="p-6 sm:p-8 h-full flex flex-col">
+   811→                  <Badge
+   812→                    variant="outline"
+   813→                    className="self-start mb-4 border-red-500/30 bg-red-500/10 text-red-400 text-xs px-2.5 py-0.5"
+   814→                  >
+   815→                    {a.challenge}
+   816→                  </Badge>
+   817→                  <h3 className="text-xl font-bold text-white mb-3">
+   818→                    {a.title}
+   819→                  </h3>
+   820→                  <p className="text-neutral-400 leading-relaxed">
+   821→                    {a.description}
+   822→                  </p>
+   823→                </CardContent>
+   824→              </Card>
+   825→            </FadeIn>
+   826→          ))}
+   827→        </div>
+   828→      </div>
+   829→    </section>
+   830→  );
+   831→}
+   832→
+   833→/* ──────────────────────────────────────────
+   834→   PROCESS / HOW I WORK SECTION
+   835→   ────────────────────────────────────────── */
+   836→function Process() {
+   837→  const steps = [
+   838→    {
+   839→      step: "01",
+   840→      title: "Kennenlernen & Analyse",
+   841→      description: "Wir sprechen über deine Zielgruppe, deine Angebote und deine aktuellen Herausforderungen. Ich verstehe dein Business, bevor ich den ersten Chat schreibe.",
+   842→      icon: <Users className="w-6 h-6" />,
+   843→    },
+   844→    {
+   845→      step: "02",
+   846→      title: "Authentischer Dialog",
+   847→      description: "Ich übernehme deine Chat-Kommunikation — individuell, empathisch und ohne Skript. Jeder Interessent wird als Mensch behandelt, nicht als Nummer in einer Pipeline.",
+   848→      icon: <MessageSquare className="w-6 h-6" />,
+   849→    },
+   850→    {
+   851→      step: "03",
+   852→      title: "Qualifizierte Termine",
+   853→      description: "Die Ergebnisse: Termine mit Menschen, die deine Lösung wirklich hören wollen. Kein No-Show, keine Enttäuschungen — nur Gespräche auf Augenhöhe.",
+   854→      icon: <CalendarCheck className="w-6 h-6" />,
+   855→    },
+   856→  ];
+   857→
+   858→  return (
+   859→    <section id="results" className="py-20 sm:py-28 bg-neutral-950">
+   860→      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+   861→        <FadeIn>
+   862→          <div className="text-center max-w-2xl mx-auto mb-16">
+   863→            <Badge
+   864→              variant="outline"
+   865→              className="mb-4 border-emerald-500/30 bg-emerald-500/10 text-emerald-400 px-3 py-1 text-xs font-medium"
+   866→            >
+   867→              So arbeite ich
+   868→            </Badge>
+   869→            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">
+   870→              In drei Schritten zum Ergebnis
+   871→            </h2>
+   872→            <p className="mt-4 text-neutral-400 text-lg">
+   873→              Kein Schnellschuss, keine Templates. Jede Zusammenarbeit beginnt mit Verständnis.
+   874→            </p>
+   875→          </div>
+   876→        </FadeIn>
+   877→
+   878→        {/* Stats */}
+   879→        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+   880→          {[
+   881→            { value: "30+", label: "Jahre Kundenkontakt" },
+   882→            { value: "5+", label: "Branchen erfahren" },
+   883→            { value: "3", label: "Kernleistungen" },
+   884→            { value: "DE · TR · EN", label: "Sprachen" },
+   885→          ].map((s, i) => (
+   886→            <FadeIn key={i} delay={i * 0.08}>
+   887→              <div className="text-center p-6 bg-white/[0.03] border border-white/10 rounded-2xl">
+   888→                <p className="text-3xl sm:text-4xl font-bold text-emerald-400">
+   889→                  {s.value}
+   890→                </p>
+   891→                <p className="mt-2 text-sm text-neutral-400">{s.label}</p>
+   892→              </div>
+   893→            </FadeIn>
+   894→          ))}
+   895→        </div>
+   896→
+   897→        {/* Process steps */}
+   898→        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+   899→          {steps.map((s, i) => (
+   900→            <FadeIn key={i} delay={i * 0.15}>
+   901→              <div className="relative p-6 sm:p-8 bg-white/[0.03] border border-white/10 rounded-2xl hover:border-emerald-500/30 transition-colors h-full">
+   902→                <div className="flex items-center gap-3 mb-5">
+   903→                  <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 shrink-0">
+   904→                    {s.icon}
+   905→                  </div>
+   906→                  <span className="text-3xl font-bold text-white/5">{s.step}</span>
+   907→                </div>
+   908→                <h3 className="text-xl font-bold text-white mb-3">{s.title}</h3>
+   909→                <p className="text-neutral-400 leading-relaxed text-sm">
+   910→                  {s.description}
+   911→                </p>
+   912→                {i < steps.length - 1 && (
+   913→                  <div className="hidden md:block absolute -right-4 lg:-right-4 top-1/2 -translate-y-1/2 text-emerald-500/30 z-10">
+   914→                    <ArrowRight className="w-6 h-6 rotate-[-90deg] md:rotate-0" />
+   915→                  </div>
+   916→                )}
+   917→              </div>
+   918→            </FadeIn>
+   919→          ))}
+   920→        </div>
+   921→      </div>
+   922→    </section>
+   923→  );
+   924→}
+   925→
+   926→/* ──────────────────────────────────────────
+   927→   PERSPECTIVE / CTA SECTION
+   928→   ────────────────────────────────────────── */
+   929→function Perspective() {
+   930→  return (
+   931→    <section className="py-20 sm:py-28 bg-neutral-950">
+   932→      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+   933→        <FadeIn>
+   934→          <div className="relative p-8 sm:p-12 bg-gradient-to-br from-emerald-500/5 to-teal-500/5 border border-emerald-500/20 rounded-3xl">
+   935→            <Quote className="w-10 h-10 text-emerald-500/30 absolute top-6 left-6 sm:top-8 sm:left-8" />
+   936→            <div className="relative z-10">
+   937→              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white tracking-tight leading-tight">
+   938→                Mit 50 Jahren verbinde ich Erfahrung, Gelassenheit und Verantwortungsbewusstsein mit der Bereitschaft, mich kontinuierlich weiterzuentwickeln.
+   939→              </h2>
+   940→              <p className="mt-6 text-neutral-300 text-lg leading-relaxed">
+   941→                Ich suche keine kurzfristige Beschäftigung, sondern eine langfristige Zusammenarbeit, in der Vertrauen, Verlässlichkeit und gemeinsame Ergebnisse im Mittelpunkt stehen. Unternehmen erhalten mit mir nicht nur einen zuverlässigen Partner, sondern jemanden, der Chancen erkennt, strategisch denkt und aktiv dazu beiträgt, gemeinsame Ziele zu erreichen.
+   942→              </p>
+   943→              <div className="mt-8 flex items-center gap-4">
+   944→                <img
+   945→                  src="/ertan-celik.png"
+   946→                  alt="Ertan Çelik"
+   947→                  className="w-12 h-12 rounded-full object-cover object-top border-2 border-emerald-500/30"
+   948→                />
+   949→                <div>
+   950→                  <p className="text-white font-semibold">Ertan Çelik</p>
+   951→                  <p className="text-neutral-400 text-sm">Gründer von Converix · Antalya, Türkei</p>
+   952→                </div>
+   953→              </div>
+   954→            </div>
+   955→          </div>
+   956→        </FadeIn>
+   957→      </div>
+   958→    </section>
+   959→  );
+   960→}
+   961→
+   962→/* ──────────────────────────────────────────
+   963→   CONTACT / CTA SECTION
+   964→   ────────────────────────────────────────── */
+   965→function Contact() {
+   966→  return (
+   967→    <section id="contact" className="py-20 sm:py-28 bg-black relative overflow-hidden">
+   968→      {/* Background glow */}
+   969→      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-3xl" />
+   970→
+   971→      <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+   972→        <FadeIn>
+   973→          <div className="text-center mb-12">
+   974→            <Badge
+   975→              variant="outline"
+   976→              className="mb-4 border-emerald-500/30 bg-emerald-500/10 text-emerald-400 px-3 py-1 text-xs font-medium"
+   977→            >
+   978→              Kontakt
+   979→            </Badge>
+   980→            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">
+   981→              Lass uns sprechen.
+   982→            </h2>
+   983→            <p className="mt-4 text-neutral-400 text-lg max-w-xl mx-auto">
+   984→              Wenn du jemanden suchst, der Menschen nicht als Leads, sondern als Persönlichkeiten betrachtet — der Verantwortung übernimmt, Chancen erkennt und dein Unternehmen professionell repräsentiert — freue ich mich auf ein persönliches Gespräch. Lass uns gemeinsam herausfinden, wie ich dein Team unterstützen kann.
+   985→            </p>
+   986→          </div>
+   987→        </FadeIn>
+   988→
+   989→        <FadeIn delay={0.15}>
+   990→          <Card className="bg-white/[0.04] border-white/10 backdrop-blur-sm">
+   991→            <CardContent className="p-6 sm:p-10">
+   992→              <form
+   993→                onSubmit={(e) => {
+   994→                  e.preventDefault();
+   995→                  const fd = new FormData(e.currentTarget);
+   996→                  const vorname = fd.get("vorname") as string || "";
+   997→                  const nachname = fd.get("nachname") as string || "";
+   998→                  const email = fd.get("email") as string || "";
+   999→                  const nachricht = fd.get("nachricht") as string || "";
+  1000→                  const subject = encodeURIComponent(`Kontaktanfrage von ${vorname} ${nachname}`);
+  1001→                  const body = encodeURIComponent(`Name: ${vorname} ${nachname}\nE-Mail: ${email}\n\nNachricht:\n${nachricht}`);
+  1002→                  window.location.href = `mailto:info@converix.de?subject=${subject}&body=${body}`;
+  1003→                }}
+  1004→                className="space-y-5"
+  1005→              >
+  1006→                <div className="grid sm:grid-cols-2 gap-5">
+  1007→                  <div className="space-y-2">
+  1008→                    <label htmlFor="vorname" className="text-sm text-neutral-300 font-medium">
+  1009→                      Vorname
+  1010→                    </label>
+  1011→                    <Input
+  1012→                      id="vorname"
+  1013→                      name="vorname"
+  1014→                      placeholder="Max"
+  1015→                      className="bg-white/5 border-white/10 text-white placeholder:text-neutral-600 focus:border-emerald-500/50 h-11"
+  1016→                    />
+  1017→                  </div>
+  1018→                  <div className="space-y-2">
+  1019→                    <label htmlFor="nachname" className="text-sm text-neutral-300 font-medium">
+  1020→                      Nachname
+  1021→                    </label>
+  1022→                    <Input
+  1023→                      id="nachname"
+  1024→                      name="nachname"
+  1025→                      placeholder="Mustermann"
+  1026→                      className="bg-white/5 border-white/10 text-white placeholder:text-neutral-600 focus:border-emerald-500/50 h-11"
+  1027→                    />
+  1028→                  </div>
+  1029→                </div>
+  1030→
+  1031→                <div className="space-y-2">
+  1032→                  <label htmlFor="email" className="text-sm text-neutral-300 font-medium">
+  1033→                    E-Mail
+  1034→                  </label>
+  1035→                  <Input
+  1036→                    id="email"
+  1037→                    name="email"
+  1038→                    type="email"
+  1039→                    placeholder="max@beispiel.de"
+  1040→                    className="bg-white/5 border-white/10 text-white placeholder:text-neutral-600 focus:border-emerald-500/50 h-11"
+  1041→                  />
+  1042→                </div>
+  1043→
+  1044→                <div className="space-y-2">
+  1045→                  <label htmlFor="nachricht" className="text-sm text-neutral-300 font-medium">
+  1046→                    Was beschäftigt dich am meisten?
+  1047→                  </label>
+  1048→                  <Textarea
+  1049→                    id="nachricht"
+  1050→                    name="nachricht"
+  1051→                    placeholder="Erzähl mir kurz von deiner Situation und deinen Zielen..."
+  1052→                    rows={4}
+  1053→                    className="bg-white/5 border-white/10 text-white placeholder:text-neutral-600 focus:border-emerald-500/50 resize-none"
+  1054→                  />
+  1055→                </div>
+  1056→
+  1057→                <Button
+  1058→                  type="submit"
+  1059→                  size="lg"
+  1060→                  className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-full h-12 text-base"
+  1061→                >
+  1062→                  <Send className="w-4 h-4 mr-2" />
+  1063→                  E-Mail öffnen
+  1064→                </Button>
+  1065→
+  1066→                <p className="text-center text-neutral-500 text-xs">
+  1067→                  Nach dem Klick wird dein E-Mail-Programm geöffnet. Deine Daten werden vertraulich behandelt und niemals an Dritte weitergegeben.
+  1068→                </p>
+  1069→              </form>
+  1070→            </CardContent>
+  1071→          </Card>
+  1072→        </FadeIn>
+  1073→      </div>
+  1074→    </section>
+  1075→  );
+  1076→}
+  1077→
+  1078→/* ──────────────────────────────────────────
+  1079→   FOOTER
+  1080→   ────────────────────────────────────────── */
+  1081→function DatenschutzDialog() {
+  1082→  const [open, setOpen] = useState(false);
+  1083→  return (
+  1084→    <Dialog open={open} onOpenChange={setOpen}>
+  1085→      <DialogTrigger asChild>
+  1086→        <button className="text-neutral-500 hover:text-neutral-300 transition-colors text-sm flex items-center gap-1.5">
+  1087→          <Lock className="w-3.5 h-3.5" />
+  1088→          Datenschutz
+  1089→        </button>
+  1090→      </DialogTrigger>
+  1091→      <DialogContent className="bg-neutral-950 border-white/10 text-neutral-200 max-w-2xl sm:max-w-3xl max-h-[85vh]">
+  1092→        <DialogHeader>
+  1093→          <DialogTitle className="text-white text-xl">Datenschutzerklärung</DialogTitle>
+  1094→        </DialogHeader>
+  1095→        <ScrollArea className="max-h-[65vh] pr-3">
+  1096→          <div className="space-y-6 text-sm text-neutral-400 leading-relaxed">
+  1097→            <div>
+  1098→              <h3 className="text-white font-semibold mb-2">1. Verantwortlicher</h3>
+  1099→              <p>Verantwortlich für die Datenverarbeitung auf dieser Website ist Converix, vertreten durch Ertan Çelik. Bei Fragen zum Datenschutz kontaktieren Sie uns über das Kontaktformular auf dieser Seite.</p>
+  1100→            </div>
+  1101→            <div>
+  1102→              <h3 className="text-white font-semibold mb-2">2. Erhebung und Speicherung personenbezogener Daten</h3>
+  1103→              <p>Beim Aufrufen dieser Website werden durch den Browser automatisch Informationen an den Server unserer Website gesendet. Diese Informationen werden temporär in einem sogenannten Logfile gespeichert. Folgende Informationen werden dabei ohne Ihr Zutun erfasst und bis zur automatisierten Löschung gespeichert: IP-Adresse des anfragenden Rechners, Datum und Uhrzeit des Zugriffs, Name und URL der abgerufenen Datei, Website, von der aus der Zugriff erfolgt (Referrer-URL), verwendeter Browser und ggf. das Betriebssystem Ihres Rechners.</p>
+  1104→            </div>
+  1105→            <div>
+  1106→              <h3 className="text-white font-semibold mb-2">3. Kontaktformular</h3>
+  1107→              <p>Das Kontaktformular auf dieser Seite funktioniert über einen mailto-Link. Wenn Sie auf &quot;E-Mail öffnen&quot; klicken, wird Ihr lokales E-Mail-Programm geöffnet und die eingegebenen Daten werden in die E-Mail übertragen. Die Daten werden dabei nicht auf unserem Server gespeichert. Die Übermittlung erfolgt direkt von Ihrem Gerät an info@converix.de. Eine Verarbeitung der Daten durch uns findet erst statt, wenn die E-Mail bei uns eingeht und wir zur Bearbeitung der Anfrage tätig werden (Art. 6 Abs. 1 lit. b DSGVO).</p>
+  1108→            </div>
+  1109→            <div>
+  1110→              <h3 className="text-white font-semibold mb-2">4. Cookies</h3>
+  1111→              <p>Diese Website verwendet keine Tracking-Cookies. Es werden lediglich technisch notwendige Cookies eingesetzt, die für den Betrieb der Website erforderlich sind. Eine Einwilligung ist hierfür nicht erforderlich.</p>
+  1112→            </div>
+  1113→            <div>
+  1114→              <h3 className="text-white font-semibold mb-2">5. Weitergabe von Daten</h3>
+  1115→              <p>Eine Übermittlung Ihrer persönlichen Daten an Dritte zu anderen als den im Folgenden aufgeführten Zwecken findet nicht statt. Wir geben Ihre persönlichen Daten nur an Dritte weiter, wenn: Sie Ihre ausdrückliche Einwilligung dazu erteilt haben, die Weitergabe zur Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen erforderlich ist, eine gesetzliche Verpflichtung zur Weitergabe besteht.</p>
+  1116→            </div>
+  1117→            <div>
+  1118→              <h3 className="text-white font-semibold mb-2">6. Ihre Rechte</h3>
+  1119→              <p>Sie haben das Recht, unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung oder Löschung dieser Daten zu verlangen. Wenn Sie eine Einwilligung zur Datenverarbeitung erteilt haben, können Sie diese Einwilligung jederzeit für die Zukunft widerrufen. Hierzu sowie zu weiteren Fragen zum Thema Datenschutz können Sie sich jederzeit an uns wenden.</p>
+  1120→            </div>
+  1121→            <div>
+  1122→              <h3 className="text-white font-semibold mb-2">7. SSL-Verschlüsselung</h3>
+  1123→              <p>Diese Seite nutzt aus Sicherheitsgründen eine SSL-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile des Browsers von &quot;http://&quot; auf &quot;https://&quot; wechselt und an dem Schloss-Symbol in Ihrer Browserzeile.</p>
+  1124→            </div>
+  1125→            <p className="text-neutral-600 text-xs pt-4">Stand: Juni 2025</p>
+  1126→          </div>
+  1127→        </ScrollArea>
+  1128→      </DialogContent>
+  1129→    </Dialog>
+  1130→  );
+  1131→}
+  1132→
+  1133→function ImpressumDialog() {
+  1134→  const [open, setOpen] = useState(false);
+  1135→  return (
+  1136→    <Dialog open={open} onOpenChange={setOpen}>
+  1137→      <DialogTrigger asChild>
+  1138→        <button className="text-neutral-500 hover:text-neutral-300 transition-colors text-sm flex items-center gap-1.5">
+  1139→          <FileText className="w-3.5 h-3.5" />
+  1140→          Impressum
+  1141→        </button>
+  1142→      </DialogTrigger>
+  1143→      <DialogContent className="bg-neutral-950 border-white/10 text-neutral-200 max-w-2xl sm:max-w-3xl max-h-[85vh]">
+  1144→        <DialogHeader>
+  1145→          <DialogTitle className="text-white text-xl">Impressum</DialogTitle>
+  1146→        </DialogHeader>
+  1147→        <ScrollArea className="max-h-[65vh] pr-3">
+  1148→          <div className="space-y-6 text-sm text-neutral-400 leading-relaxed">
+  1149→            <div>
+  1150→              <h3 className="text-white font-semibold mb-2">Angaben gemäß § 5 TMG</h3>
+  1151→              <p>Converix<br />vertreten durch Ertan Çelik</p>
+  1152→            </div>
+  1153→            <div>
+  1154→              <h3 className="text-white font-semibold mb-2">Kontakt</h3>
+  1155→              <p>E-Mail: info@converix.de<br />Website: www.converix.de</p>
+  1156→            </div>
+  1157→            <div>
+  1158→              <h3 className="text-white font-semibold mb-2">Umsatzsteuer-ID</h3>
+  1159→              <p>Umsatzsteuer-Identifikationsnummer gemäß § 27a Umsatzsteuergesetz: [wird nachgereicht]</p>
+  1160→            </div>
+  1161→            <div>
+  1162→              <h3 className="text-white font-semibold mb-2">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h3>
+  1163→              <p>Ertan Çelik<br />Converix<br />[Adresse wird nachgereicht]</p>
+  1164→            </div>
+  1165→            <div>
+  1166→              <h3 className="text-white font-semibold mb-2">Haftungsausschluss</h3>
+  1167→              <p><strong className="text-neutral-300">Haftung für Inhalte:</strong> Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen. Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen.</p>
+  1168→              <p className="mt-3"><strong className="text-neutral-300">Haftung für Links:</strong> Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.</p>
+  1169→            </div>
+  1170→            <div>
+  1171→              <h3 className="text-white font-semibold mb-2">Urheberrecht</h3>
+  1172→              <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.</p>
+  1173→            </div>
+  1174→            <div>
+  1175→              <h3 className="text-white font-semibold mb-2">Streitschlichtung</h3>
+  1176→              <p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: <span className="text-emerald-400">https://ec.europa.eu/consumers/odr/</span>. Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+  1177→            </div>
+  1178→            <p className="text-neutral-600 text-xs pt-4">Stand: Juni 2025</p>
+  1179→          </div>
+  1180→        </ScrollArea>
+  1181→      </DialogContent>
+  1182→    </Dialog>
+  1183→  );
+  1184→}
+  1185→
+  1186→function Footer() {
+  1187→  return (
+  1188→    <footer className="bg-neutral-950 border-t border-white/5 py-12">
+  1189→      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  1190→        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+  1191→          {/* Logo */}
+  1192→          <div className="flex items-center gap-2">
+  1193→            <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
+  1194→              <MessageSquare className="w-4 h-4 text-emerald-400" />
+  1195→            </div>
+  1196→            <span className="text-lg font-bold text-white">converix</span>
+  1197→          </div>
+  1198→
+  1199→          {/* Tagline */}
+  1200→          <p className="text-neutral-500 text-sm text-center">
+  1201→            Remote Chatting · Appointment Setting · Kundenbeziehungen
+  1202→          </p>
+  1203→
+  1204→          {/* Copyright */}
+  1205→          <p className="text-neutral-600 text-sm">
+  1206→            &copy; {new Date().getFullYear()} Converix. Alle Rechte vorbehalten.
+  1207→          </p>
+  1208→        </div>
+  1209→
+  1210→        {/* Social engagement note */}
+  1211→        <div className="mt-8 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+  1212→          <div className="flex items-center gap-3">
+  1213→            <Heart className="w-4 h-4 text-amber-500" />
+  1214→            <span className="text-neutral-500 text-sm">
+  1215→              Mitgründer von{" "}
+  1216→              <span className="text-amber-400 font-medium">DEKAFOK</span> —
+  1217→              Engagement für Meeresschildkröten & Mittelmeerrobben
+  1218→            </span>
+  1219→          </div>
+  1220→        </div>
+  1221→
+  1222→        {/* Legal links */}
+  1223→        <div className="mt-6 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
+  1224→          <DatenschutzDialog />
+  1225→          <ImpressumDialog />
+  1226→        </div>
+  1227→      </div>
+  1228→    </footer>
+  1229→  );
+  1230→}
+  1231→
+  1232→/* ──────────────────────────────────────────
+  1233→   PAGE
+  1234→   ────────────────────────────────────────── */
+  1235→export default function Home() {
+  1236→  return (
+  1237→    <div className="min-h-screen flex flex-col bg-black overflow-x-hidden">
+  1238→      <Navbar />
+  1239→      <main className="flex-1">
+  1240→        <Hero />
+  1241→        <PainPoints />
+  1242→        <Services />
+  1243→        <Story />
+  1244→        <Values />
+  1245→        <Strengths />
+  1246→        <TargetAudience />
+  1247→        <Process />
+  1248→        <Perspective />
+  1249→        <Contact />
+  1250→      </main>
+  1251→      <Footer />
+  1252→    </div>
+  1253→  );
+  1254→}

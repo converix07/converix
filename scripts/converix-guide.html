@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Converix Leitfaden: Domain, Server & E-Mail</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    @page {
+      size: 720px 1020px;
+      margin: 0;
+    }
+    :root {
+      --c-bg: #0a0a0a;
+      --c-bg-alt: #111111;
+      --c-text: #e4e4e7;
+      --c-text-muted: #a1a1aa;
+      --c-accent: #10b981;
+      --c-accent-dim: #059669;
+      --c-border: #27272a;
+      --c-card-bg: #141414;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 720px;
+      background: var(--c-bg);
+      color: var(--c-text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    @media screen {
+      html {
+        height: auto;
+        display: flex;
+        justify-content: center;
+        background: #1a1a1a;
+      }
+      body {
+        transform-origin: top center;
+        margin: 20px auto;
+      }
+    }
+
+    /* ── Cover ── */
+    .cover {
+      width: 720px;
+      height: 1020px;
+      box-sizing: border-box;
+      break-after: page;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      background: var(--c-bg);
+    }
+    .cover::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .cover .accent-bar {
+      width: 48px;
+      height: 4px;
+      background: var(--c-accent);
+      border-radius: 2px;
+      margin-bottom: 48px;
+    }
+    .cover .brand {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--c-accent);
+      margin-bottom: 28px;
+    }
+    .cover h1 {
+      font-size: 38px;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.15;
+      max-width: 540px;
+      margin: 0 0 24px 0;
+    }
+    .cover .subtitle {
+      font-size: 17px;
+      color: var(--c-text-muted);
+      max-width: 460px;
+      line-height: 1.6;
+      margin: 0 0 48px 0;
+    }
+    .cover .meta {
+      font-size: 12px;
+      color: #52525b;
+      letter-spacing: 1px;
+    }
+
+    /* ── Main Content ── */
+    .main-content {
+      padding: 56px 64px 48px 64px;
+    }
+
+    .chapter-header {
+      break-after: avoid;
+      break-inside: avoid;
+      margin-top: 32px;
+    }
+    .chapter-header:first-child {
+      margin-top: 0;
+    }
+    .section-tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--c-accent);
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.25;
+      margin-bottom: 6px;
+    }
+    .divider {
+      width: 40px;
+      height: 3px;
+      background: var(--c-accent);
+      border-radius: 2px;
+      margin-bottom: 24px;
+    }
+
+    .body-text {
+      color: var(--c-text);
+      line-height: 1.75;
+      margin-bottom: 14px;
+    }
+    .body-text:last-child {
+      margin-bottom: 0;
+    }
+
+    .sub-heading {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+
+    .step-card {
+      break-inside: avoid;
+      background: var(--c-card-bg);
+      border: 1px solid var(--c-border);
+      border-radius: 12px;
+      padding: 20px 22px;
+      margin-bottom: 14px;
+    }
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--c-accent);
+      color: #000;
+      font-size: 13px;
+      font-weight: 800;
+      margin-right: 12px;
+      vertical-align: middle;
+    }
+    .step-title {
+      display: inline;
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffffff;
+      vertical-align: middle;
+    }
+    .step-body {
+      color: var(--c-text-muted);
+      font-size: 14px;
+      line-height: 1.7;
+      margin-top: 10px;
+    }
+
+    .provider-card {
+      break-inside: avoid;
+      background: var(--c-card-bg);
+      border: 1px solid var(--c-border);
+      border-radius: 12px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+    }
+    .provider-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--c-accent);
+      margin-bottom: 4px;
+    }
+    .provider-detail {
+      color: var(--c-text-muted);
+      font-size: 13.5px;
+      line-height: 1.65;
+    }
+
+    .tip-box {
+      break-inside: avoid;
+      background: rgba(16,185,129,0.06);
+      border-left: 3px solid var(--c-accent);
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px;
+      margin: 18px 0;
+    }
+    .tip-box .tip-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--c-accent);
+      margin-bottom: 6px;
+    }
+    .tip-box p {
+      color: var(--c-text-muted);
+      font-size: 14px;
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    .warn-box {
+      break-inside: avoid;
+      background: rgba(239,68,68,0.06);
+      border-left: 3px solid #ef4444;
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px;
+      margin: 18px 0;
+    }
+    .warn-box .warn-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #ef4444;
+      margin-bottom: 6px;
+    }
+    .warn-box p {
+      color: var(--c-text-muted);
+      font-size: 14px;
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    ul.bullet-list {
+      margin: 10px 0 14px 0;
+      padding-left: 22px;
+    }
+    ul.bullet-list li {
+      color: var(--c-text-muted);
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 5px;
+    }
+    ul.bullet-list li::marker {
+      color: var(--c-accent);
+    }
+
+    /* ── Ending ── */
+    .ending {
+      width: 720px;
+      height: 1020px;
+      box-sizing: border-box;
+      break-before: page;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: var(--c-bg);
+    }
+    .ending::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(16,185,129,0.06) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .ending h2 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+    .ending p {
+      font-size: 16px;
+      color: var(--c-text-muted);
+      max-width: 420px;
+      line-height: 1.7;
+    }
+    .ending .contact-info {
+      margin-top: 36px;
+      font-size: 15px;
+      color: var(--c-accent);
+      font-weight: 600;
+    }
+    .ending .accent-bar {
+      width: 48px;
+      height: 4px;
+      background: var(--c-accent);
+      border-radius: 2px;
+      margin-bottom: 32px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════ COVER ════════════ -->
+<div class="cover">
+  <div class="accent-bar"></div>
+  <div class="brand">Converix</div>
+  <h1>Leitfaden: Domain, Server &amp; E-Mail einrichten</h1>
+  <p class="subtitle">Schritt-fuer-Schritt-Anleitung fuer die professionelle Online-Praesenz von Converix.</p>
+  <p class="meta">Ertan Celik &middot; Juni 2025</p>
+</div>
+
+<!-- ════════════ CONTENT ════════════ -->
+<div class="main-content">
+
+  <!-- ── KAPITEL 1: DOMAIN ── -->
+  <div class="chapter-header">
+    <div class="section-tag">Kapitel 1</div>
+    <div class="section-title">Domain finden und registrieren</div>
+    <div class="divider"></div>
+  </div>
+
+  <div class="body-text">
+    Die Domain ist die digitale Adresse deiner Marke im Internet. Sie ist das Erste, was potenzielle Kunden sehen, und praegt den ersten Eindruck massgeblich. Fuer Converix empfiehlt sich eine kurze, einpraegsame Domain, die den Markennamen direkt enthaelt. Eine klare Domain strahlt Professionalitaet aus und verstaerkt das Vertrauen, das du durch deine Arbeit aufbaust. In diesem Kapitel erfaehrst du, wie du die passende Domain findest und welche Anbieter dafuer in Frage kommen.
+  </div>
+
+  <div class="sub-heading">Kriterien fuer die perfekte Domain</div>
+  <div class="body-text">
+    Bevor du eine Domain registrierst, solltest du einige grundlegende Kriterien beachten, die den langfristigen Wert deiner Adresse sicherstellen. Eine gute Domain ist kurz, leicht auszusprechen und frei von Sonderzeichen oder Bindestrichen, die missverstanden werden koennen. Vermeide Zahlen, es sei denn, sie sind Teil des Markennamens. Die Endung .de ist fuer ein deutschsprachiges Unternehmen ideal, waehrend .com eine internationale Ausrichtung signalisiert. Pruefe unbedingt, ob der Markenname in den gaengigen sozialen Netzwerken unter demselben Namen verfuegbar ist.
+  </div>
+
+  <ul class="bullet-list">
+    <li><strong>Kurz und einpraegsam:</strong> Idealerweise unter 12 Zeichen, leicht zu merken und fehlerfrei tippen zu lassen.</li>
+    <li><strong>Ohne Bindestriche und Zahlen:</strong> converix.de ist deutlich besser als converix-online.de oder converix1.de.</li>
+    <li><strong>.de fuer den DACH-Raum:</strong> Die .de-Endung vermittelt Vertrauen bei deutschsprachigen Kunden und ist die meistgenutzte Endung in Deutschland.</li>
+    <li><strong>.com als Ergaenzung:</strong> Sichere dir idealerweise beide Endungen (.de und .com), um dich vor Markenmissbrauch zu schuetzen.</li>
+    <li><strong>Verfuegbarkeit pruefen:</strong> Nutze Check-Dienste wie undelegiert.net oder domainchecker.de, um die Verfuegbarkeit schnell zu ueberpruefen.</li>
+  </ul>
+
+  <div class="sub-heading">Empfohlene Domain-Anbieter</div>
+  <div class="body-text">
+    Die Wahl des Domain-Registrierars beeinflusst die Verwaltungsfreundlichkeit und die jaehrlichen Kosten. Achte darauf, dass der Anbieter eine vertrauenswuerdige Verwaltungsoberflaeche bietet, WHOIS-Datenschutz inklusive ist und die Domain bei Bedarf problemlos zu einem anderen Anbieter mitnehmen kannst. Im Folgenden werden drei bewaehrte Anbieter vorgestellt, die sich fuer Kleinunternehmen und Freiberufler besonders eignen.
+  </div>
+
+  <div class="provider-card">
+    <div class="provider-name">INWX (inwx.de)</div>
+    <div class="provider-detail">INWX ist ein deutscher Domain-Registrar mit ueber 20 Jahren Erfahrung. Die Preise sind transparent und wettbewerbsfaehig. Eine .de-Domain kostet hier typischerweise 4 bis 6 Euro pro Jahr. INWX bietet ein umfangreiches Webinterface, kostenlose WHOIS-Privatsphaere fuer viele Endungen und eine REST-API fuer automatisierte Verwaltung. Besonders positiv ist die Moeglichkeit, Domain- und DNS-Verwaltung getrennt zu halten.</div>
+  </div>
+  <div class="provider-card">
+    <div class="provider-name">Hetzner Online (hetzner.com)</div>
+    <div class="provider-detail">Hetzner ist nicht nur Hosting-Anbieter, sondern auch Domain-Registrar. Eine .de-Domain kostet hier etwa 6 Euro pro Jahr. Der grosse Vorteil: Wenn du Hosting und Domain beim selben Anbieter hast, reduziert sich der Verwaltungsaufwand. Hetzner bietet ausgezeichneten Support und eine zuverlaessige Infrastruktur mit Rechenzentren in Deutschland, Finnland und den USA.</div>
+  </div>
+  <div class="provider-card">
+    <div class="provider-name">Netcup (netcup.eu)</div>
+    <div class="provider-detail">Netcup ist ein kostenguenstiger deutscher Anbieter, der sich durch faire Preise und gute Leistung auszeichnet. Eine .de-Domain ist hier ab ca. 5 Euro pro Jahr erhaeltlich. Netcup bietet ebenfalls Hosting-Pakete an, sodass du alles aus einer Hand beziehen kannst. Die Verwaltungsoberflaeche ist benutzerfreundlich und der Support ist per Telefon und Ticket erreichbar.</div>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-label">Tipp</div>
+    <p>Registriere die Domain NICHT direkt beim Webdesigner oder Agentur, sondern unter deinem eigenen Namen. So behaeltst du die volle Kontrolle und kannst den Anbieter jederzeit wechseln, ohne von Dritten abhaengig zu sein.</p>
+  </div>
+
+  <div class="sub-heading">Schritt-fuer-Schritt: Domain registrieren</div>
+
+  <div class="step-card">
+    <span class="step-number">1</span>
+    <span class="step-title">Verfuegbarkeit pruefen</span>
+    <div class="step-body">Gehe auf undelegiert.net oder den Pruefdienst deines bevorzugten Anbieters und gib den gewuenschten Namen ein. Pruefe .de, .com und .eu parallel. Wenn dein Wunschname belegt ist, versuche kleine Variationen wie converix-online.de oder mein-converix.de, allerdings sollte die reine Marken-Domain Prioritaet haben.</div>
+  </div>
+  <div class="step-card">
+    <span class="step-number">2</span>
+    <span class="step-title">Anbieter waehlen und Konto erstellen</span>
+    <div class="step-body">Erstelle ein Konto bei dem Anbieter deiner Wahl. Du benoetigst deine persoehnlichen Daten (Name, Adresse, E-Mail, Telefon), da diese fuer die offizielle Registrierung bei der DENIC (fuer .de-Domains) erforderlich sind. Verwende eine dauerhafte E-Mail-Adresse, die du langfristig nutzt.</div>
+  </div>
+  <div class="step-card">
+    <span class="step-number">3</span>
+    <span class="step-title">Domain in den Warenkorb legen und bestellen</span>
+    <div class="step-body">Fuege die Domain in den Warenkorb, waehle die Laufzeit (1 Jahr reicht anfangs, laengere Laufzeiten sind oft guenstiger) und schliesse den Kauf ab. Die Aktivierung erfolgt in der Regel innerhalb weniger Minuten bis Stunden.</div>
+  </div>
+  <div class="step-card">
+    <span class="step-number">4</span>
+    <span class="step-title">WHOIS-Datenschutz aktivieren</span>
+    <div class="step-body">Aktiviere in den Einstellungen deiner Domain den WHOIS- bzw. Datenschutz-Proxy, falls der Anbieter dies anbietet. Dadurch werden deine persoenlichen Daten nicht oeffentlich im WHOIS-Verzeichnis sichtbar, was Spam reduziert und deine Privatsphaere schuetzt. Bei .de-Domains sind Kontaktdaten ohnehin nur eingeschraenkt abrufbar, aber bei .com-Domains ist dieser Schutz besonders wichtig.</div>
+  </div>
+
+  <!-- ── KAPITEL 2: HOSTING ── -->
+  <div class="chapter-header">
+    <div class="section-tag">Kapitel 2</div>
+    <div class="section-title">Hosting-Server finden und einrichten</div>
+    <div class="divider"></div>
+  </div>
+
+  <div class="body-text">
+    Das Hosting ist das Fundament deiner Website. Hier werden die Dateien deiner Webseite gespeichert und ueber das Internet verfuegbar gemacht. Die Wahl des richtigen Hostings beeinflusst die Ladezeit deiner Seite, die Verfuegbarkeit und letztlich auch das Ranking bei Google. Fuer eine moderne Next.js-Website wie Converix gibt es mehrere Optionen, die im Folgenden detailliert erlaeutert werden. Eine durchdachte Entscheidung an dieser Stelle erspart dir spaeter viel Aufwand und moegliche Ausfallzeiten.
+  </div>
+
+  <div class="sub-heading">Hosting-Arten im Vergleich</div>
+  <div class="body-text">
+    Es gibt verschiedene Arten von Hosting, die sich in Leistung, Preis und Komplexitaet unterscheiden. Fuer eine einzelne Landing Page wie die Converix-Website sind die folgenden drei Optionen am relevantesten. Die Wahl haengt davon ab, wie viel Kontrolle du haben moechtest und welches Budget zur Verfuegung steht. Eine Next.js-Website kann auf allen drei Optionen betrieben werden, erfordert aber jeweils eine unterschiedliche Einrichtung.
+  </div>
+
+  <div class="provider-card">
+    <div class="provider-name">Option A: Vercel (vercel.com) &mdash; Empfohlen</div>
+    <div class="provider-detail">Vercel ist die offizielle Hosting-Plattform fuer Next.js und die einfachste Moeglichkeit, deine Converix-Website online zu stellen. Der kostenlose Plan (Hobby) reicht fuer eine einzelne Landing Page vollkommen aus. Du verbindest einfach dein GitHub-Repository mit Vercel, und jede Aenderung wird automatisch erstellt und veroeffentlicht. Vorteile: automatisches SSL, weltweites CDN, keine Serverkonfiguration noetig. Der Hosten erfolgt auf Edge-Servern weltweit, was fuer schnelle Ladezeiten sorgt. Nachteile: begrenzter Speicher auf dem kostenlosen Plan, Abhaengigkeit von einem einzelnen Anbieter.</div>
+  </div>
+  <div class="provider-card">
+    <div class="provider-name">Option B: Hetzner Cloud Server (hetzner.com)</div>
+    <div class="provider-detail">Ein Hetzner Cloud Server (ab ca. 4 Euro/Monat fuer einen CX22) bietet dir volle Kontrolle ueber die Serverumgebung. Du installierst Node.js, baust die Next.js-Anwendung und startest sie mit einem Process-Manager wie PM2. Vorteile: volle Kontrolle, sehr gute Preis-Leistung, Rechenzentrum in Deutschland (Nuernberg oder Falkenstein). Nachteile: du bist selbst fuer Updates, Sicherheit und SSL-Zertifikate verantwortlich. Diese Option eignet sich besonders, wenn du spaeter weitere Projekte auf demselben Server hosten moechtest.</div>
+  </div>
+  <div class="provider-card">
+    <div class="provider-name">Option C: Netlify (netlify.com)</div>
+    <div class="provider-detail">Netlify ist aehnlich wie Vercel eine Plattform, die sich auf statische Websites und moderne Frameworks spezialisiert hat. Auch hier reicht der kostenlose Plan fuer eine Landing Page. Der Vorteil gegenueber Vercel: Netlify bietet eine sehr einfache Benutzeroberflaeche und nahtlose Git-Integration. Die Einrichtung ist vergleichbar einfach: Repository verbinden, Build-Befehl angeben, und die Seite wird automatisch bereitgestellt. Netlify ist eine solide Alternative, falls Vercel dir aus irgendeinem Grund nicht zusagt.</div>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-label">Empfehlung</div>
+    <p>Fuer den Start mit Converix ist Vercel die beste Wahl. Es ist kostenlos, erfordert keine Serverkonfiguration und bietet automatisches Deployment. Wenn die Website wachst und du mehr Kontrolle brauchst, kannst du spaeter auf einen Hetzner-Server umziehen.</p>
+  </div>
+
+  <div class="sub-heading">Schritt-fuer-Schritt: Website auf Vercel bereitstellen</div>
+
+  <div class="step-card">
+    <span class="step-number">1</span>
+    <span class="step-title">GitHub-Repository erstellen</span>
+    <div class="step-body">Erstelle ein kostenloses Konto auf github.com, falls du noch keins hast. Lade den gesamten Projektordner der Converix-Website in ein neues Repository hoch. Der Ordner sollte alle Dateien enthalten: package.json, den src-Ordner, die public-Ordner mit dem Profilfoto und die Konfigurationsdateien (next.config.js, tsconfig.json). Du kannst den Code direkt im Browser hochladen oder Git auf deinem lokalen Computer verwenden.</div>
+  </div>
+  <div class="step-card">
+    <span class="step-number">2</span>
+    <span class="step-title">Vercel-Konto erstellen und Projekt importieren</span>
+    <div class="step-body">Gehe auf vercel.com und registriere dich mit deinem GitHub-Konto. Klicke auf &ldquo;New Project&rdquo; und waehle das Converix-Repository aus. Vercel erkennt automatisch, dass es sich um ein Next.js-Projekt handelt, und konfiguriert die Build-Einstellungen entsprechend. Der Build-Befehl wird automatisch auf &ldquo;next build&rdquo; gesetzt, das Ausgabeverzeichnis auf &ldquo;.next&rdquo;.</div>
+  </div>
+  <div class="step-card">
+    <span class="step-number">3</span>
+    <span class="step-title">Benutzerdefinierte Domain verbinden</span>
+    <div class="step-body">Nach dem ersten Deployment erhaeltst du eine automatisch generierte URL (z.B. converix.vercel.app). Unter Settings &gt; Domains kannst du nun deine eigene Domain (z.B. converix.de) hinzufuegen. Vercel zeigt dir genau an, welche DNS-Eintraege du bei deinem Domain-Anbieter vornehmen musst, in der Regel zwei A-Records oder ein CNAME-Eintrag.</div>
+  </div>
+  <div class="step-card">
+    <span class="step-number">4</span>
+    <span class="step-title">DNS-Eintraege beim Domain-Anbieter setzen</span>
+    <div class="step-body">Logge dich bei deinem Domain-Anbieter (z.B. INWX oder Hetzner) ein und navigiere zu den DNS-Einstellungen deiner Domain. Fuege die von Vercel angegebenen Eintraege hinzu. Bei Vercel ist das typischerweise ein CNAME-Eintrag fuer &ldquo;www&rdquo; und ein A-Record fuer die Apex-Domain, der auf 76.76.21.21 zeigt. Nach der Aenderung kann es bis zu 48 Stunden dauern, bis die DNS-Aenderungen weltweit aktiv sind, in der Regel aber nur wenige Minuten.</div>
+  </div>
+
+  <div class="warn-box">
+    <div class="warn-label">Wichtig</div>
+    <p>Aendere die Nameserver deiner Domain NICHT auf Vercel, es sei denn, du moechtest die komplette DNS-Verwaltung an Vercel uebertragen. Es ist sicherer und flexibler, nur die DNS-Eintraege (A-Record/CNAME) beim aktuellen Anbieter zu aendern und die Domain-Verwaltung dort zu belassen.</p>
+  </div>
+
+  <div class="sub-heading">SSL-Verschluesselung</div>
+  <div class="body-text">
+    Bei Vercel und Netlify wird das SSL-Zertifikat automatisch und kostenlos bereitgestellt (Let's Encrypt). Das bedeutet, deine Website ist sofort ueber HTTPS erreichbar, was fuer Google-Rankings und das Vertrauen der Besucher essentiell ist. Bei einem eigenen Hetzner-Server musst du Certbot installieren und konfigurieren, um automatisch verlaengerbare SSL-Zertifikate zu erhalten. Die Einrichtung von Certbot ist gut dokumentiert und in der Regel innerhalb von 15 Minuten erledigt. Ohne SSL-Zertifikat zeigen moderne Browser eine Sicherheitswarnung an, was potenzielle Kunden abschreckt.
+  </div>
+
+  <!-- ── KAPITEL 3: E-MAIL ── -->
+  <div class="chapter-header">
+    <div class="section-tag">Kapitel 3</div>
+    <div class="section-title">Professionelle E-Mail einrichten</div>
+    <div class="divider"></div>
+  </div>
+
+  <div class="body-text">
+    Eine professionelle E-Mail-Adresse wie info@converix.de oder ertan@converix.de ist fuer den geschaeftlichen Auftritt unverzichtbar. Sie strahlt Seriositaet aus und staerkt das Markenimage im Vergleich zu einer kostenlosen Gmail- oder Web.de-Adresse. Zudem benoetigst du eine zuverlaessige E-Mail-Loesung, die den Datenschutzanforderungen (DSGVO) entspricht und saemtliche Anfragen von Interessenten verlaesslich zustellt. Die Wahl des E-Mail-Anbieters beeinflusst die Zuverlaessigkeit deiner Kommunikation massgeblich.
+  </div>
+
+  <div class="sub-heading">Empfohlene E-Mail-Anbieter</div>
+  <div class="body-text">
+    Es gibt mehrere E-Mail-Anbieter, die sich fuer Kleinunternehmen und Freiberufler eignen. Die wichtigsten Kriterien bei der Auswahl sind: Datenschutzkonformitaet (Server in Deutschland oder Europa), Benutzerfreundlichkeit, Moeglichkeit der Anbindung an eigene Domains und ein faires Preis-Leistungsverhaeltnis. Im Folgenden werden drei Anbieter vorgestellt, die diese Kriterien erfuellen und sich in der Praxis bewaehrt haben.
+  </div>
+
+  <div class="provider-card">
+    <div class="provider-name">Option A: Google Workspace (workspace.google.com)</div>
+    <div class="provider-detail">Google Workspace bietet E-Mail unter deiner eigenen Domain mit dem bewaehrten Gmail-Interface. Der Business Starter Plan kostet ca. 6 Euro pro Monat pro Nutzer und beinhaltet 30 GB Speicherplatz. Vorteile: hervorragendes Web-Interface, mobile Apps, Spam-Filter, Kalender und Kontaktverwaltung. Nachteile: Daten werden auf Google-Servern verarbeitet, was datenschutzrechtlich bedacht werden muss. Fuer die Converix-Website im Kontaktformular ist die Anbindung ueber SMTP moeglich, sodass Anfragen direkt in deinem Postfach landen.</div>
+  </div>
+  <div class="provider-card">
+    <div class="provider-name">Option B: Microsoft 365 (microsoft.com/de-de/microsoft-365)</div>
+    <div class="provider-detail">Microsoft 365 bietet E-Mail unter deiner eigenen Domain mit Outlook. Der Microsoft 365 Business Basic Plan kostet ca. 4,80 Euro pro Monat pro Nutzer und beinhaltet 50 GB Postfachspeicher. Vorteile: nahtlose Integration mit Windows, Outlook-Desktop-App, 1 TB OneDrive-Speicher. Besonders empfehlenswert, wenn du bereits mit Microsoft-Produkten arbeitest. Die Spam-Filterung ist robust und die Zuverlaessigkeit ist hoch, da Microsoft eines der groessten E-Mail-Netzwerke der Welt betreibt.</div>
+  </div>
+  <div class="provider-card">
+    <div class="provider-name">Option C: Mailbox.org (mailbox.org) &mdash; Datenschutzfavorit</div>
+    <div class="provider-detail">Mailbox.org ist ein deutscher E-Mail-Anbieter mit Servern in Bremen. Er zeichnet sich durch ausgezeichneten Datenschutz, klimaneutralen Betrieb und transparente Preise aus. Ein Postfach mit eigener Domain kostet ab 1 Euro pro Monat. Vorteile: alle Daten in Deutschland, DSGVO-konform, keine Werbeverfolgung, PGP-Verschluesselung moeglich. Dies ist die beste Wahl, wenn Datenschutz fuer dich oberste Prioritaet hat und du moeglichst alles bei Anbietern mit Standort Deutschland halten moechtest.</div>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-label">Tipp</div>
+    <p>Fuer den Start mit Converix empfiehlt sich Mailbox.org. Es ist guenstig, datenschutzkonform und die Einrichtung ist innerhalb von 15 Minuten erledigt. Spaeter kannst du jederzeit zu Google Workspace oder Microsoft 365 wechseln, wenn du mehr Funktionen benoetigst.</p>
+  </div>
+
+  <div class="sub-heading">Schritt-fuer-Schritt: E-Mail mit eigener Domain einrichten</div>
+
+  <div class="step-card">
+    <span class="step-number">1</span>
+    <span class="step-title">Anbieter waehlen und Konto erstellen</span>
+    <div class="step-body">Registriere dich bei dem E-Mail-Anbieter deiner Wahl. Gib dabei deine bereits registrierte Domain an. Der Anbieter wird dir die noetigen DNS-Eintraege anzeigen, die du vornehmen musst, um die E-Mail-Funktion zu aktivieren. Bei Mailbox.org waehlst du den Tarif &ldquo;Mail&rdquo; und gibst bei der Bestellung deine Domain converix.de an.</div>
+  </div>
+  <div class="step-card">
+    <span class="step-number">2</span>
+    <span class="step-title">MX-Eintraege beim Domain-Anbieter setzen</span>
+    <div class="step-body">Logge dich bei deinem Domain-Anbieter ein und navigiere zu den DNS-Einstellungen. Loesche gegebenenfalls vorhandene MX-Eintraege und fuege die vom E-Mail-Anbieter angegebenen neuen MX-Eintraege hinzu. MX-Eintraege (Mail Exchange) sagen dem Internet, welcher Mailserver fuer den Empfang von E-Mails fuer deine Domain zustaendig ist. Bei Mailbox.org sind das typischerweise Eintraege wie mxthint.mailbox.org mit Prioritaet 10. Aendere diese Eintraege nur, wenn du dir sicher bist, da fehlerhafte MX-Eintraege dazu fuehren, dass keine E-Mails empfangen werden.</div>
+  </div>
+  <div class="step-card">
+    <span class="step-number">3</span>
+    <span class="step-title">SPF-, DKIM- und DMARC-Eintraege konfigurieren</span>
+    <div class="step-body">Diese drei DNS-Eintraege sind essentiell fuer die E-Mail-Zustellbarkeit. SPF (Sender Policy Framework) definiert, welche Server E-Mails im Namen deiner Domain versenden duerfen. DKIM (DomainKeys Identified Mail) fuegt eine digitale Signatur hinzu, die die Echtheit der E-Mail bestaetigt. DMARC (Domain-based Message Authentication, Reporting and Conformance) gibt an, was mit E-Mails geschehen soll, die die Pruefung nicht bestehen. Dein E-Mail-Anbieter stellt dir die genauen Werte bereit. Trage sie als TXT-Eintraege in den DNS-Einstellungen deiner Domain ein. Ohne diese Eintraege laufen deine E-Mails Gefahr, im Spam-Ordner der Empfaenger zu landen.</div>
+  </div>
+  <div class="step-card">
+    <span class="step-number">4</span>
+    <span class="step-title">E-Mail-Postfaecher erstellen</span>
+    <div class="step-body">Erstelle im Admin-Bereich deines E-Mail-Anbieters die gewuenschten Postfaecher. Fuer den Start empfiehlt sich info@converix.de als allgemeine Kontaktadresse (wie im Impressum und Kontaktformular angegeben) und ertan@converix.de als persoenliche Adresse. Richte im Anschluss einen E-Mail-Client wie Outlook, Thunderbird oder die Gmail-App ein, um die Mails bequem zu verwalten. Die Zugangsdaten (IMAP/SMTP-Server, Port, Verschluesselung) stellt der Anbieter in der Dokumentation bereit.</div>
+  </div>
+
+  <div class="warn-box">
+    <div class="warn-label">Wichtig</div>
+    <p>Richte unbedingt SPF, DKIM und DMARC ein, sobald deine E-Mail laeuft. Ohne diese Eintraege werden deine E-Mails von vielen Anbietern (besonders Google und Microsoft) als potenziell unvertrauenswuerdig eingestuft. Das fuehrt dazu, dass deine Nachrichten im Spam-Ordner landen oder gar nicht erst zugestellt werden.</p>
+  </div>
+
+  <!-- ── KAPITEL 4: ZUSAMMENFUEHRUNG ── -->
+  <div class="chapter-header">
+    <div class="section-tag">Kapitel 4</div>
+    <div class="section-title">Alles zusammenfuehren: Ueberblick und naechste Schritte</div>
+    <div class="divider"></div>
+  </div>
+
+  <div class="body-text">
+    Nachdem du die drei Saeulen deiner Online-Praesenz eingerichtet hast (Domain, Hosting, E-Mail), ist es wichtig, das Gesamtbild zu verstehen und die naechsten Schritte zu planen. Die folgende Zusammenfassung zeigt dir, wie die Komponenten zusammenwirken und welche Aufgaben als naechstes anstehen. Eine systematische Vorgehensweise verhindert, dass wichtige Details uebersehen werden, und stellt sicher, dass deine Website von Anfang an professionell und zuverlaessig funktioniert.
+  </div>
+
+  <div class="sub-heading">Wie alles zusammenwirkt</div>
+  <div class="body-text">
+    Deine Domain ist die Adresse, unter der deine Website erreichbar ist. Wenn ein Besucher converix.de in den Browser eingibt, leiten die DNS-Eintraege die Anfrage an deinen Hosting-Anbieter (z.B. Vercel) weiter, der die Website-Dateien ausliefert. Gleichzeitig leiten die MX-Eintraege der Domain E-Mails an deinen E-Mail-Anbieter (z.B. Mailbox.org) weiter. Beide Systeme nutzen dieselbe Domain, sind aber unabhaengig voneinander konfigurierbar. Das bedeutet, du kannst den Hosting-Anbieter wechseln, ohne die E-Mail zu beeinflussen, und umgekehrt.
+  </div>
+
+  <div class="sub-heading">Naechste Schritte nach der Einrichtung</div>
+
+  <ul class="bullet-list">
+    <li><strong>Website-Performance pruefen:</strong> Nutze tools.pingdom.com oder Google PageSpeed Insights, um die Ladezeit deiner Website zu messen. Die Zielwerte sind: Ladezeit unter 3 Sekunden, Performance-Score ueber 90. Vercel liefert in der Regel sehr gute Werte, aber grosse Bilder wie das Profilfoto sollten komprimiert werden.</li>
+    <li><strong>Google Search Console einrichten:</strong> Registriere deine Website bei search.google.com/search-console. Hier kannst du den Indexierungsstatus ueberwachen, Sitemaps einreichen und die Sichtbarkeit in den Google-Suchergebnissen verfolgen. Dies ist kostenlos und unerlaesslich fuer die langfristige Auffindbarkeit deiner Website.</li>
+    <li><strong>SSL-Zertifikat pruefen:</strong> Rufe deine Website im Browser auf und stelle sicher, dass das Schloss-Symbol in der Adresszeile angezeigt wird und die URL mit https:// beginnt. Bei Vercel geschieht dies automatisch. Ohne SSL warnen moderne Browser vor der Website.</li>
+    <li><strong>Kontaktformular testen:</strong> Sende eine Testnachricht ueber das Kontaktformular auf deiner Website und stelle sicher, dass die mailto-Funktion korrekt funktioniert. Das Formular sollte das E-Mail-Programm des Besuchers oeffnen und die Nachricht an info@converix.de adressieren.</li>
+    <li><strong>Impressum und Datenschutz aktualisieren:</strong> Ergaenze im Impressum und in der Datenschutzerklaerung die tatsaechliche URL deiner Website, deine E-Mail-Adresse und deine Adresse. Diese Angaben sind gesetzlich erforderlich und sollten korrekt sein, sobald die Website oeffentlich erreichbar ist.</li>
+    <li><strong>Backup-Strategie:</strong> Bei Vercel wird der Code in Git versioniert, was bereits ein rudimentaeres Backup darstellt. Erstelle zusaetzlich regelmassige Backups deiner E-Mails und der DNS-Einstellungen. Ein Screenshot der DNS-Eintraege im Notfall erspart viel Stress.</li>
+  </ul>
+
+  <div class="sub-heading">Kostenuebersicht (jaehrlich)</div>
+  <div class="body-text">
+    Die folgende Tabelle gibt dir einen Ueberblick ueber die zu erwartenden Kosten fuer die drei Komponenten im ersten Jahr. Die geschaetzten Gesamtkosten liegen zwischen 55 und 130 Euro pro Jahr, was fuer eine professionelle Online-Praesenz sehr wirtschaftlich ist. Die hoeheren Kosten entstehen vor allem bei der Wahl von Google Workspace als E-Mail-Anbieter. Mit Mailbox.org und Vercel kannst du die Kosten auf unter 60 Euro pro Jahr beschraenken.
+  </div>
+
+  <div class="provider-card">
+    <div class="provider-detail"><strong>Domain (.de):</strong> ca. 5 Euro/Jahr bei INWX oder Hetzner<br><strong>Hosting (Vercel):</strong> kostenlos (Hobby Plan) oder ca. 48 Euro/Jahr bei Hetzner Cloud<br><strong>E-Mail (Mailbox.org):</strong> ca. 12 Euro/Jahr | <strong>Google Workspace:</strong> ca. 72 Euro/Jahr<br><strong>Gesamt (guenstig):</strong> ca. 17 Euro/Jahr | <strong>Gesamt (komfortabel):</strong> ca. 125 Euro/Jahr</div>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-label">Fazit</div>
+    <p>Mit einer eigenen Domain bei INWX, kostenlosem Hosting auf Vercel und E-Mail bei Mailbox.org kannst du die gesamte Converix-Online-Praesenz fuer unter 20 Euro im Jahr betreiben. Beginne mit dieser kostenguenstigen Kombination und skaliere spaeter, wenn dein Business wachst. Die wichtigsten Dinge von Anfang an: vertrauenswuerdige Domain, schnelle Website und zuverlaessige E-Mail-Kommunikation.</p>
+  </div>
+
+</div>
+
+<!-- ════════════ ENDING ════════════ -->
+<div class="ending">
+  <div class="accent-bar"></div>
+  <h2>Bereit fuer den Start.</h2>
+  <p>Dieser Leitfaden hat dir alle Schritte gezeigt. Wenn du Hilfe bei der Umsetzung benoetigst, kontaktiere mich gerne.</p>
+  <div class="contact-info">info@converix.de</div>
+</div>
+
+</body>
+</html>
