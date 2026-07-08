@@ -242,7 +242,7 @@ function Hero() {
                   asChild
                   variant="outline"
                   size="lg"
-                  className="border-white/20 text-white hover:bg-white/5 rounded-full px-6 sm:px-8 text-sm sm:text-base h-11 sm:h-12 w-full sm:w-auto"
+                  className="border-white/30 text-white bg-black hover:bg-white/10 rounded-full px-6 sm:px-8 text-sm sm:text-base h-11 sm:h-12 w-full sm:w-auto"
                 >
                   <a href="#story">Meine Geschichte</a>
                 </Button>
@@ -1196,7 +1196,7 @@ function ImpressumDialog() {
             </div>
             <div>
               <h3 className="text-white font-semibold mb-2">Kontakt</h3>
-              <p>Telefon: 015679 611096<br />E-Mail: kontakt@converix.info<br />Website: www.converix.de<br />LinkedIn: <span className="text-emerald-400">linkedin.com/in/ertancelik-converix</span></p>
+              <p>Telefon: 015679 611096<br />E-Mail: kontakt@converix.info<br />Website: www.converix.eu<br />LinkedIn: <span className="text-emerald-400">linkedin.com/in/ertancelik-converix</span></p>
             </div>
             <div>
               <h3 className="text-white font-semibold mb-2">Umsatzsteuer-ID</h3>
