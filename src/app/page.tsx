@@ -475,7 +475,7 @@ function Story() {
       icon: <Briefcase className="w-5 h-5" />,
       role: "Friseurausbildung, Ulm",
       year: "",
-      text: "Die Schule der Geduld und des Zuhörens — hier habe ich gelernt, dass jeder Mensch eine Geschichte hat, die es wert ist, gehört zu werden.",
+      text: "Meine Schule der Geduld und des Zuhörens. Jeder Mensch hat eine Geschichte, die es wert ist, gehört zu werden. Das habe ich hier gelernt — und es ist bis heute die Basis meiner Arbeit.",
     },
     {
       icon: <Briefcase className="w-5 h-5" />,
@@ -503,9 +503,9 @@ function Story() {
     },
     {
       icon: <Heart className="w-5 h-5" />,
-      role: "Hotel Guide",
+      role: "Spa-Manager",
       year: "",
-      text: "Betreuung internationaler Gäste mit Empathie und aktivem Zuhören — besonders dann, wenn ein Gast noch gar nicht weiß, was er wirklich braucht.",
+      text: "Aktives Zuhören an Gästen aus aller Welt perfektioniert. Gelernt, zwischen den Zeilen zu hören und Bedürfnisse zu erkennen, bevor sie ausgesprochen werden.",
     },
     {
       icon: <MessageSquare className="w-5 h-5" />,
@@ -856,7 +856,7 @@ function Process() {
     {
       step: "03",
       title: "Qualifizierte Termine",
-      description: "Die Ergebnisse: Termine mit Menschen, die deine Lösung wirklich hören wollen. Kein No-Show, keine Enttäuschungen — nur Gespräche auf Augenhöhe.",
+      description: "Termine mit Menschen, die deine Lösung wirklich hören wollen. Weil der Vertrauensaufbau schon im Chat stattgefunden hat, erscheinen sie — keine No-Shows.",
       icon: <CalendarCheck className="w-6 h-6" />,
     },
   ];
@@ -873,10 +873,10 @@ function Process() {
               So arbeite ich
             </Badge>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">
-              In drei Schritten zum Ergebnis
+              Empathic AI-Setting
             </h2>
             <p className="mt-4 text-neutral-400 text-lg">
-              Kein Schnellschuss, keine Templates. Jede Zusammenarbeit beginnt mit Verständnis.
+              KI übernimmt die Vorbereitung. Ich übernehme den Dialog. Vertrauen entsteht nur zwischen Menschen.
             </p>
           </div>
         </FadeIn>
