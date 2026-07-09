@@ -509,9 +509,9 @@ function Story() {
     },
     {
       icon: <MessageSquare className="w-5 h-5" />,
-      role: "Setter im Online Marketing",
+      role: "Chat Setter mit KI-Unterstützung",
       year: "Heute",
-      text: "Professionelles Chat Setting und Appointment Setting für Coaches, Agenturen und Online Marketer — die Summe aus 30+ Jahren direktem Kundenkontakt, fließt in jeden einzelnen Dialog ein.",
+      text: "Professionelles Chat Setting und Appointment Setting für Coaches, Agenturen und Online Marketer. Ich nutze KI im Hintergrund für Datenanalyse und Vorbereitung — den eigentlichen Dialog führe ich persönlich. 30+ Jahre Kundenkontakt fließen in jeden Einzelgespräch ein.",
     },
   ];
 
@@ -535,7 +535,7 @@ function Story() {
 
             <FadeIn delay={0.15}>
               <p className="mt-6 text-neutral-300 text-lg leading-relaxed">
-                Mein Name ist Ertan Çelik. Gebürtiger Ulmer, Sohn einer Gastarbeiterfamilie, 50 Jahre jung, stolzer Vater von drei Töchtern. Heute lebe ich in Antalya — eine bewusste Entscheidung für Lebensqualität, Internationalität und ortsunabhängige Professionalität. Vom Familienbetrieb über Gastronomie, Tourismus, Vertrieb und Unternehmertum bis hin zur internationalen Kundenbetreuung habe ich in über 30 Jahren eine Sache immer wieder erlebt:{" "}
+                Mein Name ist Ertan Çelik. Gebürtiger Ulmer, Sohn einer Gastarbeiterfamilie, 50 Jahre jung, Vater von drei Töchtern. Heute lebe ich in Antalya — eine bewusste Entscheidung für Lebensqualität und ortsunabhängige Arbeit. Vom Familienbetrieb über Gastronomie, Tourismus, Vertrieb und Unternehmertum bis zur internationalen Kundenbetreuung habe ich in über 30 Jahren immer wieder dasselbe erlebt:{" "}
                 <span className="text-emerald-400 font-semibold">
                   Menschen kaufen nicht wegen Produkten. Menschen entscheiden sich für Vertrauen.
                 </span>
@@ -544,7 +544,7 @@ function Story() {
 
             <FadeIn delay={0.25}>
               <p className="mt-4 text-neutral-400 leading-relaxed">
-                Ich habe in verschiedensten Branchen gearbeitet — von Coaching und Persönlichkeitsentwicklung über Finanzen und Investment bis hin zur internationalen Gastronomie. Dabei habe ich gelernt: Nachhaltiger Erfolg entsteht nicht durch Fachwissen allein, sondern durch Menschen, die Verantwortung übernehmen, strategisch denken und Vertrauen aufbauen. Ich erfülle nicht nur Aufgaben, sondern verstehe Zusammenhänge, erkenne Potenziale und trage aktiv zum Erfolg jedes Unternehmens bei, mit dem ich zusammenarbeite.
+                Ich habe in verschiedensten Branchen gearbeitet — Coaching, Finanzen, Investment, Gastronomie. Dabei ist mir klar geworden: Erfolg entsteht nicht durch Fachwissen allein. Menschen, die zuhören können, Verantwortung übernehmen und Vertrauen aufbauen, machen den Unterschied. Ich verstehe Zusammenhänge, erkenne Potenziale und trage zum Erfolg jedes Unternehmens bei, mit dem ich arbeite.
               </p>
             </FadeIn>
 
@@ -624,22 +624,22 @@ function Values() {
   const values = [
     {
       title: "Ehrlichkeit",
-      description: "Klare, direkte Kommunikation ohne Umwege. Keine leeren Versprechen, keine versteckten Agenden — was ich sage, das halte ich. Transparenz ist die Grundlage jeder Zusammenarbeit, die Bestand hat.",
+      description: "Klare Kommunikation ohne Umwege. Keine leeren Versprechen, keine versteckten Agenden — was ich sage, das halte ich. Transparenz ist die Grundlage jeder Zusammenarbeit, die Bestand hat.",
       icon: <Eye className="w-5 h-5" />,
     },
     {
       title: "Respekt",
-      description: "Jeder Mensch verdient Wertschätzung, unabhängig von Position oder Herkunft. Ich begegne Menschen auf Augenhöhe — im Chat wie im Leben. Diese Haltung habe ich als Sohn einer Gastarbeiterfamilie in Ulm von klein auf gelebt.",
+      description: "Ich begegne Menschen auf Augenhöhe — im Chat wie im Leben. Diese Haltung habe ich als Sohn einer Gastarbeiterfamilie in Ulm von klein auf gelebt.",
       icon: <Heart className="w-5 h-5" />,
     },
     {
       title: "Zuverlässigkeit",
-      description: "Versprechen halte ich ein, auch wenn es unbequem wird. Verbindlichkeit ist kein Bonus, sondern die Grundlage jeder Zusammenarbeit. Geduld und Verbindlichkeit sind für mich keine weichen Werte — sie sind Geschäftsgrundlage.",
+      description: "Versprechen halte ich ein, auch wenn es unbequem wird. Verbindlichkeit ist für mich keine Soft-Skill-Theorie — sie ist Geschäftsgrundlage.",
       icon: <ShieldCheck className="w-5 h-5" />,
     },
     {
       title: "Augenhöhe",
-      description: "Erfolgreiche Zusammenarbeit entsteht durch gegenseitiges Vertrauen. Ich bin kein Dienstleister, der Befehle ausführt — ich bin ein Partner, der mitdenkt, strategische Lösungen entwickelt und gemeinsame Ziele erreicht.",
+      description: "Ich verstehe mich nicht als Dienstleister, der Befehle ausführt. Ich bin ein Partner, der mitdenkt und gemeinsam Ziele erreicht.",
       icon: <Scale className="w-5 h-5" />,
     },
   ];
@@ -693,11 +693,11 @@ function Strengths() {
   const strengths = [
     {
       title: "Authentische Kommunikation",
-      description: "Ich spreche mit Menschen, nicht zu ihnen. Keine Skripte, keine Maschen — jeder Dialog wird individuell und ehrlich geführt. Was mich von vielen anderen unterscheidet: Ich verstehe die Zusammenhänge hinter den Worten.",
+      description: "Ich spreche mit Menschen, nicht zu ihnen. Keine Skripte, keine Maschen. KI erledigt für mich die Datenaufbereitung — aber den Gesprächsaufbau, das Zuhören und den Abschluss mache ich selbst. Das unterscheidet mich von reinen KI-Chatbots.",
     },
     {
       title: "Vertrauensaufbau",
-      description: "Nachhaltig, ehrlich und auf Augenhöhe. Wie als Reiseleiter: Innerhalb weniger Minuten entsteht eine Verbindung, die andere erst nach Wochen erreichen. Vertrauen ist kein Nebeneffekt — es ist meine Methode.",
+      description: "Ehrlich und auf Augenhöhe. Als Reiseleiter habe ich gelernt, innerhalb weniger Minuten eine Verbindung zu fremden Menschen aufzubauen, die andere erst nach Wochen schaffen. Vertrauen ist bei mir keine Theorie — es ist Erfahrung.",
     },
     {
       title: "Kulturelle Sensibilität",
@@ -705,11 +705,11 @@ function Strengths() {
     },
     {
       title: "Strategisches Denken",
-      description: "Herausforderungen schnell erkennen, Chancen analysieren und daraus nachhaltige Lösungen entwickeln. Ich erfülle nicht nur Aufgaben, sondern verstehe das große Ganze und trage aktiv zum Unternehmenserfolg bei.",
+      description: "Herausforderungen erkennen, Chancen bewerten und daraus Lösungen entwickeln. Ich erfülle nicht nur Aufgaben, sondern verstehe das Geschäft meines Partners und trage aktiv zum Erfolg bei.",
     },
     {
       title: "Empathie & Zuhören",
-      description: "Besonders dann, wenn ein Kunde noch gar nicht weiß, was er wirklich braucht. Ich identifiziere die echten Bedürfnisse hinter der Anfrage — und schaffe dadurch echten Mehrwert.",
+      description: "Besonders dann, wenn ein Kunde noch gar nicht weiß, was er wirklich braucht. Ich höre zu, stelle die richtigen Fragen und finde heraus, was hinter der Anfrage steckt. Das ist etwas, das keine Maschine kann.",
     },
     {
       title: "Remote-Kompetenz",
@@ -765,25 +765,25 @@ function TargetAudience() {
     {
       title: "Coaches & Berater",
       description:
-        "Deine Zeit gehört deinen Klienten, nicht dem Terminmanagement. Ich übernehme den gesamten Vorab-Prozess — vom ersten Chat bis zum gebuchten Beratungsgespräch.",
+        "Deine Zeit gehört deinen Klienten, nicht dem Terminmanagement. Ich übernehme den Vorab-Prozess — vom ersten Chat bis zum gebuchten Gespräch.",
      challenge: "Fehlende Zeit für Akquise",
     },
     {
       title: "Marketing-Agenturen",
       description:
-        "Deine Kunden zahlen für Ergebnisse, nicht für Versuche. Mit strukturiertem Chat-Setting sorgst du für messbare Conversion-Raten und zufriedene Kunden.",
+        "Deine Kunden wollen Ergebnisse. Mit strukturiertem Chat-Setting sorgst du für Conversion-Raten, die sich sehen lassen können.",
       challenge: "Sinkende Conversion-Raten",
     },
     {
       title: "Online Marketer",
       description:
-        "Deine Ads generieren Klicks — aber was passiert danach? Ich schließe die Lücke zwischen Klick und Kauf durch professionelle Conversations im Chat.",
+        "Deine Ads bringen Klicks — aber was passiert danach? Ich schließe die Lücke zwischen Klick und Kauf durch echte Gespräche im Chat.",
       challenge: "Leads konvertieren nicht",
     },
     {
       title: "Chat Setter & Appointment Setter Teams",
       description:
-        "Du suchst jemanden, der nicht nur Skripte abarbeitet, sondern echte Beziehungen aufbaut. Ich bringe 30+ Jahre Kundenkontakt-Erfahrung in dein Team ein.",
+        "Du suchst jemanden, der nicht nur Skripte abarbeitet, sondern Beziehungen aufbaut. Ich bringe 30+ Jahre Kundenkontakt in dein Team ein.",
       challenge: "Eintönige Skript-Abarbeit",
     },
   ];
@@ -850,7 +850,7 @@ function Process() {
     {
       step: "02",
       title: "Authentischer Dialog",
-      description: "Ich übernehme deine Chat-Kommunikation — individuell, empathisch und ohne Skript. Jeder Interessent wird als Mensch behandelt, nicht als Nummer in einer Pipeline.",
+      description: "Ich übernehme deine Chat-Kommunikation — individuell, empathisch und ohne Skript. KI unterstützt mich bei der Vorbereitung, aber den Dialog führe ich selbst. Jeder Interessent wird als Mensch behandelt, nicht als Nummer.",
       icon: <MessageSquare className="w-6 h-6" />,
     },
     {
